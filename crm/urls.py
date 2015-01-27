@@ -3,8 +3,10 @@ from django.conf.urls import patterns, include, url
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
+from home.views import home_view
 
 urlpatterns = patterns('',
+        (r'^$',home_view),
     # Examples:
     # url(r'^$', 'crm.views.home', name='home'),
     # url(r'^crm/', include('crm.foo.urls')),

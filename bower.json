@@ -1,0 +1,14 @@
+{
+  "name": "crm",
+  "version": "1.0.0",
+  "authors": [
+    "Pablo Galindo"
+  ],
+  "license": "MIT",
+  "homepage": "github.com/isec-sa/crm",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "~3.3.2",
+    "ember": "~1.9.1"
+  }
+}

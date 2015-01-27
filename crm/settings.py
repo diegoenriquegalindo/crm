@@ -1,4 +1,7 @@
 # Django settings for crm project.
+import os
+settings_folder = os.path.dirname(os.path.realpath(__file__))
+PROJECT_FOLDER = os.path.dirname(settings_folder)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -61,7 +64,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = PROJECT_FOLDER + '/static'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -69,6 +72,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+        PROJECT_FOLDER + '/bower_components',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -108,6 +112,7 @@ ROOT_URLCONF = 'crm.urls'
 WSGI_APPLICATION = 'crm.wsgi.application'
 
 TEMPLATE_DIRS = (
+        # PROJECT_FOLDER + '/home/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -120,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'home',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
