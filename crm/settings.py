@@ -1,7 +1,7 @@
 # Django settings for crm project.
 import os
 settings_folder = os.path.dirname(os.path.realpath(__file__))
-PROJECT_FOLDER = os.path.dirname(settings_folder)
+BASE_DIR = os.path.dirname(settings_folder)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -14,8 +14,8 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': BASE_DIR + '/mydata.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': '',
         'PASSWORD': '',
@@ -64,7 +64,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = PROJECT_FOLDER + '/static'
+STATIC_ROOT = BASE_DIR + '/static'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -72,7 +72,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-        PROJECT_FOLDER + '/bower_components',
+        BASE_DIR + '/bower_components',
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -112,7 +112,7 @@ ROOT_URLCONF = 'crm.urls'
 WSGI_APPLICATION = 'crm.wsgi.application'
 
 TEMPLATE_DIRS = (
-        # PROJECT_FOLDER + '/home/templates',
+        # BASE_DIR + '/home/templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
