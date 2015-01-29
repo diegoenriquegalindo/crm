@@ -9,12 +9,32 @@
   <body>
     <div class='container'>
       <h1>CRM</h1>
-      <p>Thanks for visiting my site.</p>
 
       {% if logged_in %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>City</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for customer in customer_list %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.city }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
       <form action="logout/">
         <input type="submit" value="Log Out" class="btn btn-success">
       </form>
+
       {% else %}
       <form action="login/" method="post"> {% csrf_token %}
         <label for="username">User name:</label>

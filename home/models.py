@@ -14,4 +14,6 @@ class Customer(models.Model):
 class Employee(models.Model):
     user = models.OneToOneField(User)
     customers = models.ManyToManyField(Customer)
+    def __unicode__(self):
+        return self.user.username
 

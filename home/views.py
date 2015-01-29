@@ -2,11 +2,16 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
+from django.contrib.auth.models import User
 
 def home_view(request):
     c = {}
     c.update(csrf(request))
     c["logged_in"] = request.user.is_authenticated()
+    c["customer_list"] = []
+    if c["logged_in"]:
+        user_obj = User.objects.get(username=str(request.user.username))
+        c["customer_list"] = user_obj.employee.customers.all()
     return render_to_response("index.html",c)
 
 def login_view(request):
