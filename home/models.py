@@ -7,3 +7,5 @@ class Customer(models.Model):
     state_province = models.CharField(max_length=30)
     country = models.CharField(max_length=50)
     website = models.URLField()
+    def __unicode__(self):
+        return self.name
