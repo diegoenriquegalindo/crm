@@ -1,4 +1,4 @@
 bower_components/
 *.pyc
 test*.py
-static/
+/static/
