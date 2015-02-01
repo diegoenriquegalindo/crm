@@ -1,0 +1,28 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <!-- <base href="/" target="_blank"> -->
+    <title>CRM</title>
+    {% block links %}
+    {% endblock %}
+  </head>
+
+  <body>
+    <div class='container'>
+      {% if logged_in %}
+
+      {% block logged_in %}
+      {% endblock %}
+
+      {% else %}
+
+      {% block logged_out %}
+      {% endblock %}
+
+      {% endif %}
+
+    </div>
+    {% block scripts %}
+    {% endblock %}
+  </body>
+</html>
