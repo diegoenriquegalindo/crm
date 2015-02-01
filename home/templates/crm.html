@@ -25,29 +25,34 @@
     </div>
   </nav>
 </div>
-
-{% block content %}
-<table class="table">
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>City</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for customer in customer_list %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ customer.name }}</td>
-      <td>{{ customer.address }}</td>
-      <td>{{ customer.city }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-{% endblock %}
+<div class='col-md-3'>
+  <p>Profile</p>
+  <p>{{username}}</p>
+</div>
+<div class='col-md-8'>
+  {% block content %}
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Address</th>
+        <th>City</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for customer in customer_list %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ customer.name }}</td>
+        <td>{{ customer.address }}</td>
+        <td>{{ customer.city }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock %}
+</div>
 
 {% endblock %}
 

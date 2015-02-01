@@ -11,6 +11,7 @@ def get_loggedin_context(request):
     c["customer_list"] = []
     if c["logged_in"]:
         user_obj = User.objects.get(username=str(request.user.username))
+        c["username"] = user_obj.username
         c["customer_list"] = user_obj.employee.customers.all()
     return c
 
