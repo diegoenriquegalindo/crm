@@ -1,0 +1,9 @@
+.head-div {
+  height: 70px;
+  display: table;
+}
+
+.head-div div{
+  display: table-cell;
+  vertical-align: middle;
+}

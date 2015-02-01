@@ -4,12 +4,11 @@
     <!-- <base href="/" target="_blank"> -->
     <title>CRM</title>
     <link rel="stylesheet" href="/static/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/home/index.css">
   </head>
 
   <body>
     <div class='container'>
-      <h1>CRM</h1>
-
       {% if logged_in %}
       <table class="table">
         <thead>
@@ -36,13 +35,25 @@
       </form>
 
       {% else %}
-      <form action="login/" method="post"> {% csrf_token %}
-        <label for="username">User name:</label>
-        <input type="text" name="username" value="" id="username">
-        <label for="password">Password:</label>
-        <input type="password" name="password" value="" id="password">
-        <input type="submit" value="Log In" class="btn btn-primary"/>
-      </form>
+      <div class='col-md-10 head-div'>
+        <h1>CRM</h1>
+      </div>
+      <div class='col-md-2 head-div'>
+        <div>
+          <button type='button' class='btn btn-success'>
+            Sign In
+          </button>
+        </div>
+      </div>
+      <div class='col-md-12'>
+        <form action="login/" method="post"> {% csrf_token %}
+          <label for="username">User name:</label>
+          <input type="text" name="username" value="" id="username">
+          <label for="password">Password:</label>
+          <input type="password" name="password" value="" id="password">
+          <input type="submit" value="Log In" class="btn btn-primary"/>
+        </form>
+      </div>
       {% endif %}
 
     </div>
