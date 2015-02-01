@@ -1,0 +1,34 @@
+{% extends "index.html" %}
+
+{% block logged_in %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>City</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for customer in customer_list %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ customer.name }}</td>
+      <td>{{ customer.address }}</td>
+      <td>{{ customer.city }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<form action="logout/">
+  <input type="submit" value="Log Out" class="btn btn-success">
+</form>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/jquery/dist/jquery.js"></script>
+<script src="/static/handlebars/handlebars.js"></script>
+<script src="/static/ember/ember.js"></script>
+{% endblock %}
+

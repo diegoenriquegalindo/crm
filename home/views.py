@@ -12,7 +12,7 @@ def home_view(request):
     if c["logged_in"]:
         user_obj = User.objects.get(username=str(request.user.username))
         c["customer_list"] = user_obj.employee.customers.all()
-    return render_to_response("index.html",c)
+    return render_to_response("crm.html",c)
 
 def login_view(request):
     username = request.POST.get('username', '')
