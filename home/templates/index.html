@@ -16,8 +16,10 @@
     </button>
   </div>
 </div>
+{% block no_access_message %}
+{% endblock %}
 <div class='col-md-12'>
-  <form action="login/" method="post"> {% csrf_token %}
+  <form action="/login/" method="post"> {% csrf_token %}
     <label for="username">User name:</label>
     <input type="text" name="username" value="" id="username">
     <label for="password">Password:</label>

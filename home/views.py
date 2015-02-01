@@ -38,8 +38,14 @@ def logout_view(request):
 
 def messages_view(request):
     c = get_loggedin_context(request)
-    return render_to_response("messages.html",c)
+    if c["logged_in"]:
+        return render_to_response("messages.html",c)
+    else:
+        return render_to_response("no_access.html",c)
 
 def settings_view(request):
     c = get_loggedin_context(request)
-    return render_to_response("settings.html",c)
+    if c["logged_in"]:
+        return render_to_response("settings.html",c)
+    else:
+        return render_to_response("no_access.html",c)
