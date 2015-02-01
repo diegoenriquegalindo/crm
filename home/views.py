@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
 
-def home_view(request):
+def get_loggedin_context(request):
     c = {}
     c.update(csrf(request))
     c["logged_in"] = request.user.is_authenticated()
@@ -12,6 +12,10 @@ def home_view(request):
     if c["logged_in"]:
         user_obj = User.objects.get(username=str(request.user.username))
         c["customer_list"] = user_obj.employee.customers.all()
+    return c
+
+def home_view(request):
+    c = get_loggedin_context(request)
     return render_to_response("crm.html",c)
 
 def login_view(request):
@@ -31,3 +35,11 @@ def logout_view(request):
     auth.logout(request)
     # Redirect to a success page.
     return HttpResponseRedirect("/")
+
+def messages_view(request):
+    c = get_loggedin_context(request)
+    return render_to_response("messages.html",c)
+
+def settings_view(request):
+    c = get_loggedin_context(request)
+    return render_to_response("settings.html",c)

@@ -3,13 +3,15 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 from home.views import home_view
-from home.views import login_view
-from home.views import logout_view
+from home.views import login_view, logout_view
+from home.views import messages_view, settings_view
 
 urlpatterns = patterns('',
         (r'^$',home_view),
         (r'^login/?',login_view),
         (r'^logout/?',logout_view),
+        (r'^messages/',messages_view),
+        (r'^settings/',settings_view),
     # Examples:
     # url(r'^$', 'crm.views.home', name='home'),
     # url(r'^crm/', include('crm.foo.urls')),

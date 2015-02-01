@@ -10,11 +10,13 @@
     <div class="container">
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
+          {% block active %}
           <li class="active"><a href='/'>UserName</a></li>
-          <li><a>Messages</a></li>
-          <li><a>Settings</a></li>
+          <li><a href='/messages/'>Messages</a></li>
+          <li><a href='/settings/'>Settings</a></li>
+          {% endblock %}
           <li>
-            <a href='logout/'>
+            <a href='/logout/'>
               <button type='button' class='btn btn-success'>Log Out</button>
             </a>
           </li>
@@ -24,28 +26,28 @@
   </nav>
 </div>
 
-  {% block content %}
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Address</th>
-        <th>City</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for customer in customer_list %}
-      <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ customer.name }}</td>
-        <td>{{ customer.address }}</td>
-        <td>{{ customer.city }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endblock %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Name</th>
+      <th>Address</th>
+      <th>City</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for customer in customer_list %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ customer.name }}</td>
+      <td>{{ customer.address }}</td>
+      <td>{{ customer.city }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
 
 {% endblock %}
 
