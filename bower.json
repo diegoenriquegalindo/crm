@@ -9,6 +9,6 @@
   "private": true,
   "dependencies": {
     "bootstrap": "~3.3.2",
-    "ember-data": "~0.0.14"
+    "ember-data": "~1.0.0"
   }
 }
