@@ -32,37 +32,50 @@
   <p>{{username}}</p>
 </div>
 
-<div id='content' class='col-md-9'>
+<div id='content' class='col-md-9' style='background-color:#D3E9FC'>
   {% block content %}
   <script type='text/x-handlebars' data-template-name='application'>
     {% verbatim %}
     <h3>
-      <span class='label label-primary'>Customers</span>
-      <span class='label label-default'>Tasks</span>
+      {{#link-to 'index' tagName='span' classNames='label label-primary'}}
+      Customers
+      {{/link-to}}
+      {{#link-to 'tasks' tagName='span' classNames='label label-default'}}
+      Tasks
+      {{/link-to}}
     </h3>
     {{input}}
+    {{outlet}}
     {% endverbatim %}
+  </script>
+
+  <script type='text/x-handlebars' data-template-name='index'>
+    {%verbatim%}
     <table class="table">
       <thead>
         <tr>
           <th>#</th>
-          <th>Name</th>
-          <th>Address</th>
-          <th>City</th>
+          <th>Customer</th>
+          <th>Contact</th>
         </tr>
       </thead>
       <tbody>
-        {% for customer in customer_list %}
+        {{#each}}
         <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ customer.name }}</td>
-          <td>{{ customer.address }}</td>
-          <td>{{ customer.city }}</td>
+          <td>{{id}}</td>
+          <td>{{name}}</td>
+          <td>{{contact}}</td>
         </tr>
-        {% endfor %}
+        {{/each}}
       </tbody>
     </table>
+    {%endverbatim%}
   </script>
+
+  <script type='text/x-handlebars' data-template-name='tasks'>
+    <p>Else</p>
+  </script>
+
   {% endblock %}
 </div>
 
@@ -72,6 +85,7 @@
 <script src="/static/jquery/dist/jquery.js"></script>
 <script src="/static/handlebars/handlebars.js"></script>
 <script src="/static/ember/ember.js"></script>
+<script src="/static/ember-data/ember-data.js"></script>
 <script src='/static/home/crm.js'></script>
 {% endblock %}
 

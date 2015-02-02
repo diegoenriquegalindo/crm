@@ -4,13 +4,18 @@ var CRM = Ember.Application.create({
 });
 
 CRM.Router.map(function(){
-  this.route("customers");
   this.route("tasks");
 });
 
-App.ApplicationAdapter = DS.FixtureAdapter.extend();
+CRM.IndexRoute = Ember.Route.extend({
+  model: function(){
+    return this.store.findAll('customer');
+  }
+});
 
-CRM.Customer = DS.model.extend({
+CRM.ApplicationAdapter = DS.FixtureAdapter.extend();
+
+CRM.Customer = DS.Model.extend({
   name: DS.attr('string'),
   detail: DS.attr('number'),
   contact: DS.attr('string'),
@@ -31,7 +36,7 @@ CRM.Customer.FIXTURES = [
   { id:10, name:"P&G", detail:10010, contact:"Camilo", position:"Writer", username:"diego", tasks:[10010] }
 ];
 
-CRM.Task = DS.model.extend({
+CRM.Task = DS.Model.extend({
   text: DS.attr('string')
 });
 CRM.Task.FIXTURES = [
@@ -46,6 +51,5 @@ CRM.Task.FIXTURES = [
   { id:10009, text:'nineth' },
   { id:10010, text:'tenth' },
 ];
-
 
 
