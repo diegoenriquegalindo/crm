@@ -27,12 +27,21 @@
 </div>
 
 <div class='col-md-3'>
+  <img data-src="holder.js/200x200" src="http://upload.wikimedia.org/wikipedia/commons/a/ae/Ursus_arctos_-_Norway.jpg" class="img-thumbnail">
   <p>Profile</p>
   <p>{{username}}</p>
 </div>
+
 <div id='content' class='col-md-9'>
   {% block content %}
   <script type='text/x-handlebars' data-template-name='application'>
+    {% verbatim %}
+    <h3>
+      <span class='label label-primary'>Customers</span>
+      <span class='label label-default'>Tasks</span>
+    </h3>
+    {{input}}
+    {% endverbatim %}
     <table class="table">
       <thead>
         <tr>
