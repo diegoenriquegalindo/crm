@@ -11,7 +11,7 @@
       <div class="navbar-collapse collapse">
         <ul class="nav navbar-nav">
           {% block active %}
-          <li class="active"><a href='/'>UserName</a></li>
+          <li class="active"><a href='/'>{{username}}</a></li>
           <li><a href='/messages/'>Messages</a></li>
           <li><a href='/settings/'>Settings</a></li>
           {% endblock %}
@@ -37,11 +37,15 @@
   <script type='text/x-handlebars' data-template-name='application'>
     {% verbatim %}
     <h3>
-      {{#link-to 'index' tagName='span' classNames='label label-primary'}}
-      Customers
+      {{#link-to 'index'}}
+      <span id='customers-label' class='label label-primary'>
+        Customers
+      </span>
       {{/link-to}}
-      {{#link-to 'tasks' tagName='span' classNames='label label-default'}}
-      Tasks
+      {{#link-to 'tasks'}}
+      <span id='tasks-label' class='label label-default'>
+        Tasks
+      </span>
       {{/link-to}}
     </h3>
     {{input}}
@@ -73,7 +77,7 @@
   </script>
 
   <script type='text/x-handlebars' data-template-name='tasks'>
-    <p>Else</p>
+    <p>Tasks go Here.</p>
   </script>
 
   {% endblock %}

@@ -1,3 +1,25 @@
 .head-div {
   height: 70px;
 }
+
+a:link {
+  text-decoration: none;
+}
+
+tbody tr:hover {
+  background-color: #78AEDC;
+  color: #E7E7E7;
+}
+
+#content {
+  border-radius: 10px;
+}
+
+#tasks-label {
+  background-color: #78AEDC;
+}
+
+#tasks-label:hover , #customers-label:hover {
+  color :#E7E7E7;
+}
+
