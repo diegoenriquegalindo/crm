@@ -65,7 +65,7 @@
       </thead>
       <tbody>
         {{#each}}
-        <tr>
+        <tr {{action 'customerSelect' id}}>
           <td>{{id}}</td>
           <td>{{name}}</td>
           <td>{{contact}}</td>
@@ -74,6 +74,10 @@
       </tbody>
     </table>
     {%endverbatim%}
+  </script>
+
+  <script data-template-name="customer" type="text/x-handlebars">
+    <p>This is a customer.</p>
   </script>
 
   <script type='text/x-handlebars' data-template-name='tasks'>

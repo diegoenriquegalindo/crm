@@ -5,6 +5,15 @@ var CRM = Ember.Application.create({
 
 CRM.Router.map(function(){
   this.route("tasks");
+  this.resource('customer',{path:'/:customer_id'});
+});
+
+CRM.IndexController = Ember.ArrayController.extend({
+  actions:{
+    customerSelect: function(id){
+      this.transitionToRoute('customer',id);
+    }
+  }
 });
 
 CRM.IndexRoute = Ember.Route.extend({
