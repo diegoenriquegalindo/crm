@@ -59,16 +59,16 @@ CRM.Task = DS.Model.extend({
   text: DS.attr('string')
 });
 CRM.Task.FIXTURES = [
-  { id:10001, text:'first' },
-  { id:10002, text:'second' },
-  { id:10003, text:'third' },
-  { id:10004, text:'fourth' },
-  { id:10005, text:'fifth' },
-  { id:10006, text:'sixth' },
-  { id:10007, text:'seventh' },
-  { id:10008, text:'eighth' },
-  { id:10009, text:'nineth' },
-  { id:10010, text:'tenth' },
+  { id:10001, text:'first task' },
+  { id:10002, text:'second task' },
+  { id:10003, text:'third task' },
+  { id:10004, text:'fourth task' },
+  { id:10005, text:'fifth task' },
+  { id:10006, text:'sixth task' },
+  { id:10007, text:'seventh task' },
+  { id:10008, text:'eighth task' },
+  { id:10009, text:'nineth task' },
+  { id:10010, text:'tenth task' },
 ];
 
 

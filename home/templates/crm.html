@@ -77,7 +77,40 @@
   </script>
 
   <script data-template-name="customer" type="text/x-handlebars">
-    <p>This is a customer.</p>
+    {%verbatim%}
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Customer</th>
+          <th>Contact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{id}}</td>
+          <td>{{name}}</td>
+          <td>{{contact}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Task</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each tasks}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{text}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {%endverbatim%}
   </script>
 
   <script type='text/x-handlebars' data-template-name='tasks'>
