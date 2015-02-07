@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'home',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
+    'rest_framework'
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )
@@ -161,4 +162,9 @@ LOGGING = {
             'propagate': True,
         },
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'PAGINATE_BY': 10
 }
