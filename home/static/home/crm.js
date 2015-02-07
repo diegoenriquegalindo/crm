@@ -4,7 +4,9 @@ var CRM = Ember.Application.create({
 });
 
 CRM.Router.map(function(){
-  this.route("tasks");
+  this.resource('tasks',function() {
+    this.resource('task',{path:'/:task_id'});
+  });
   this.resource('customer',{path:'/:customer_id'});
 });
 
@@ -26,6 +28,9 @@ CRM.IndexRoute = Ember.Route.extend({
   }
 });
 CRM.TasksRoute = Ember.Route.extend({
+  model: function() {
+    return this.store.findAll('task');
+  },
   activate: function() {
     $("#tasks-label").css('background-color','#2F79B9');
     $("#customers-label").css('background-color','#78AEDC');

@@ -114,7 +114,24 @@
   </script>
 
   <script type='text/x-handlebars' data-template-name='tasks'>
-    <p>Tasks go Here.</p>
+    {%verbatim%}
+    <table class='table'>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Text</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each}}
+        <tr>
+          <td>{{id}}</td>
+          <td>{{text}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+    {%endverbatim%}
   </script>
 
   {% endblock %}
