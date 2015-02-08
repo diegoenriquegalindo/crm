@@ -94,28 +94,17 @@
         </tr>
       </tbody>
     </table>
-    <table class='table'>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Task</th>
-          <th>Created</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{#each tasks}}
-        <tr>
-          <td>{{id}}</td>
-          <td>{{text}}</td>
-          <td>{{createAt}}</td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+    {{render 'tasks_list' tasks}}
     {%endverbatim%}
   </script>
 
   <script type='text/x-handlebars' data-template-name='tasks'>
+    {%verbatim%}
+    {{render 'tasks_list' model}}
+    {%endverbatim%}
+  </script>
+
+  <script data-template-name="tasks_list" type="text/x-handlebars">
     {%verbatim%}
     <table class='table'>
       <thead>
