@@ -99,6 +99,7 @@
         <tr>
           <th>#</th>
           <th>Task</th>
+          <th>Created</th>
         </tr>
       </thead>
       <tbody>
@@ -106,6 +107,7 @@
         <tr>
           <td>{{id}}</td>
           <td>{{text}}</td>
+          <td>{{createAt}}</td>
         </tr>
         {{/each}}
       </tbody>
@@ -119,14 +121,25 @@
       <thead>
         <tr>
           <th>#</th>
+          <th>Customer<th>
           <th>Text</th>
+          <th>Created</th>
         </tr>
       </thead>
       <tbody>
         {{#each}}
         <tr>
           <td>{{id}}</td>
+          <td>{{customer.name}}</td>
           <td>{{text}}</td>
+          <td>{{createAt}}</td>
+          {{#if isCService}}
+          <td>{{when}}</td>
+          <td>{{appoint}}</td>
+          {{else}}
+          <td>Item Number: {{itemNum}}</td>
+          <td>Quantity: {{quantity}}</td>
+          {{/if}}
         </tr>
         {{/each}}
       </tbody>
