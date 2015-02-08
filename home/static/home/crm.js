@@ -61,19 +61,25 @@ CRM.Customer.FIXTURES = [
 ];
 
 CRM.Task = DS.Model.extend({
-  text: DS.attr('string')
+  text:        DS.attr('string'),
+  createAt:   DS.attr('date'),
+  type:        DS.attr('number'), // 0 for customer service. 1 for shipping
+  when:        DS.attr('date'),
+  appoint: DS.attr('date'),
+  itemNum:  DS.attr('string'),
+  quantity:    DS.attr('number')
 });
 CRM.Task.FIXTURES = [
-  { id:10001, text:'first task' },
-  { id:10002, text:'second task' },
-  { id:10003, text:'third task' },
-  { id:10004, text:'fourth task' },
-  { id:10005, text:'fifth task' },
-  { id:10006, text:'sixth task' },
-  { id:10007, text:'seventh task' },
-  { id:10008, text:'eighth task' },
-  { id:10009, text:'nineth task' },
-  { id:10010, text:'tenth task' },
+  { id: 10001, text: 'first task',   createAt: new Date(2015,1,15,13,0,0,0), type: 0, when: new Date(), appoint: new Date(), itemNum: null, quantity: null},
+  { id: 10002, text: 'second task',  createAt: new Date(2015,1,15,13,0,0,0), type: 0, when: new Date(), appoint: new Date(), itemNum: null, quantity: null},
+  { id: 10003, text: 'third task',   createAt: new Date(2015,1,15,13,0,0,0), type: 0, when: new Date(), appoint: new Date(), itemNum: null, quantity: null},
+  { id: 10004, text: 'fourth task',  createAt: new Date(2015,1,15,13,0,0,0), type: 0, when: new Date(), appoint: new Date(), itemNum: null, quantity: null},
+  { id: 10005, text: 'fifth task',   createAt: new Date(2015,1,15,13,0,0,0), type: 0, when: new Date(), appoint: new Date(), itemNum: null, quantity: null},
+  { id: 10006, text: 'sixth task',   createAt: new Date(2015,1,15,13,0,0,0), type: 1, when: null,       appoint: null,       itemNum: 'a',  quantity: 1},
+  { id: 10007, text: 'seventh task', createAt: new Date(2015,1,15,13,0,0,0), type: 1, when: null,       appoint: null,       itemNum: 'b',  quantity: 5},
+  { id: 10008, text: 'eighth task',  createAt: new Date(2015,1,15,13,0,0,0), type: 1, when: null,       appoint: null,       itemNum: 'c',  quantity: 3},
+  { id: 10009, text: 'nineth task',  createAt: new Date(2015,1,15,13,0,0,0), type: 1, when: null,       appoint: null,       itemNum: 'd',  quantity: 9},
+  { id: 10010, text: 'tenth task',   createAt: new Date(2015,1,15,13,0,0,0), type: 1, when: null,       appoint: null,       itemNum: 'e',  quantity: 2}
 ];
 
 
