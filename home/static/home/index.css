@@ -31,3 +31,12 @@ a:link {
   text-align: center;
 }
 
+.new-task-div {
+  background-color: #F8F8F8;
+  border-radius: 10px;
+}
+
+.unselect-button {
+  background-color: #78AEDC;
+}
+

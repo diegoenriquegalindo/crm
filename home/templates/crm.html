@@ -108,11 +108,21 @@
     {%verbatim%}
     <br>
     <div id='add-btn-div'>
-      <button class="btn btn-primary">
+      <button class="btn btn-primary" {{action 'addTask'}}>
         <span class="glyphicon glyphicon-plus"> Add Task</span>
       </button>
     </div>
     <br>
+    {{#view 'newTask' isVisible=isNewTaskVisible}}
+    <div class='col-md-8 col-md-offset-2 new-task-div'>
+      <div class='col-md-3'>
+        <button class="col-md-12 btn btn-primary">C Service</button>
+        <button class="col-md-12 btn btn-primary unselect-button">Shipping</button>
+      </div>
+      <div class='col-md-9'>Data goes here</div>
+    </div>
+    <div class='col-md-2'></div>
+    {{/view}}
     <table class='table'>
       <thead>
         <tr>

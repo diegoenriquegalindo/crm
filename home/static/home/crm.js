@@ -17,6 +17,14 @@ CRM.IndexController = Ember.ArrayController.extend({
     }
   }
 });
+CRM.TasksListController = Ember.ArrayController.extend({
+  isNewTaskVisible: false,
+  actions:{
+    addTask: function() {
+      this.toggleProperty('isNewTaskVisible');
+    }
+  }
+});
 
 CRM.IndexRoute = Ember.Route.extend({
   model: function(){
@@ -49,6 +57,13 @@ CRM.TaskView = Ember.View.extend({
     else {
       $('#'+this.task.id).next().remove();
     }
+  }
+});
+CRM.NewTaskView = Ember.View.extend({
+  isVisible: true,
+  yahoo: 'yahoo',
+  click: function() {
+    console.log(this.controller);
   }
 });
 
