@@ -34,9 +34,21 @@ a:link {
 .new-task-div {
   background-color: #F8F8F8;
   border-radius: 10px;
+  height: 150px;
 }
 
 .unselect-button {
   background-color: #78AEDC;
 }
+
+.vertical-align {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+textarea {
+  resize: none;
+}
+
 

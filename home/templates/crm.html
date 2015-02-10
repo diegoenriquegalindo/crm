@@ -115,11 +115,25 @@
     <br>
     {{#view 'newTask' isVisible=isNewTaskVisible}}
     <div class='col-md-8 col-md-offset-2 new-task-div'>
-      <div class='col-md-3'>
-        <button class="col-md-12 btn btn-primary">C Service</button>
-        <button class="col-md-12 btn btn-primary unselect-button">Shipping</button>
+      <div class='col-md-3 btn-group-vertical'>
+        <button class="btn btn-primary">C Service</button>
+        <button class="btn btn-primary unselect-button">Shipping</button>
       </div>
-      <div class='col-md-9'>Data goes here</div>
+      <div class='col-md-9'>
+        <div class='col-md-12 input-group'>
+          <span class="input-group-addon" id="customerSpan">Customer</span>
+          {{input action='setBeginning' id='customerInput' type='text' class='form-control' aria-describedby='customerSpan'}}
+        </div>
+        <div class='input-group'>
+          <span class="input-group-addon" id="beginningSpan">Beginning</span>
+          {{input action='setBeginning' id='beginning' type='text' class='form-control' aria-describedby='beginningSpan'}}
+          <span class="input-group-addon" id="endSpan">End</span>
+          {{input action='setBeginning' id='end' type='text' class='form-control' aria-describedby='endSpan'}}
+        </div>
+      </div>
+      <div class='col-md-12'>
+        {{textarea class='form-control' maxlength='140' rows='2'}}
+      </div>
     </div>
     <div class='col-md-2'></div>
     {{/view}}

@@ -17,11 +17,17 @@ CRM.IndexController = Ember.ArrayController.extend({
     }
   }
 });
+$(function(){
+  $('#beginning').datepicker();
+});
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
   actions:{
     addTask: function() {
       this.toggleProperty('isNewTaskVisible');
+    },
+    setBeginning: function() {
+      alert('yahooo');
     }
   }
 });
