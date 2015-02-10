@@ -6,7 +6,7 @@ a:link {
   text-decoration: none;
 }
 
-tbody tr:hover {
+.hover:hover {
   background-color: #78AEDC;
   color: #E7E7E7;
 }

@@ -17,6 +17,13 @@ CRM.IndexController = Ember.ArrayController.extend({
     }
   }
 });
+CRM.TasksListController = Ember.ArrayController.extend({
+  actions:{
+    showTaskInfo: function(id){
+      $('<tr><td>yahoo</td></tr>').insertAfter('#'+id);
+    }
+  }
+});
 
 CRM.IndexRoute = Ember.Route.extend({
   model: function(){

@@ -65,7 +65,7 @@
       </thead>
       <tbody>
         {{#each}}
-        <tr {{action 'customerSelect' id}}>
+        <tr class='hover' {{action 'customerSelect' id}}>
           <td>{{id}}</td>
           <td>{{name}}</td>
           <td>{{contact}}</td>
@@ -117,7 +117,7 @@
       </thead>
       <tbody>
         {{#each}}
-        <tr>
+        <tr class='hover' {{bind-attr id=id}} {{action 'showTaskInfo' id}}>
           <td>{{id}}</td>
           <td>{{customer.name}}</td>
           <td>{{text}}</td>
