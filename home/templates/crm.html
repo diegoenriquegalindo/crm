@@ -110,26 +110,26 @@
       <thead>
         <tr>
           <th>#</th>
-          <th>Customer<th>
-          <th>Text</th>
+          <th>Customer</th>
           <th>Created</th>
+          <th>Beginning / Item Number</th>
+          <th>End / Quantity</th>
         </tr>
       </thead>
       <tbody>
-        {{#each}}
-        <tr class='hover' {{bind-attr id=id}} {{action 'showTaskInfo' id}}>
-          <td>{{id}}</td>
-          <td>{{customer.name}}</td>
-          <td>{{text}}</td>
-          <td>{{createAt}}</td>
-          {{#if isCService}}
-          <td>{{when}}</td>
-          <td>{{appoint}}</td>
+        {{#each task in model}}
+        {{#view 'task' classNames='hover' id=task.id tag='tr' task=task}}
+          <td>{{task.id}}</td>
+          <td>{{task.customer.name}}</td>
+          <td>{{task.createAt}}</td>
+          {{#if task.isCService}}
+          <td>{{task.when}}</td>
+          <td>{{task.appoint}}</td>
           {{else}}
-          <td>Item Number: {{itemNum}}</td>
-          <td>Quantity: {{quantity}}</td>
+          <td>Item Number: {{task.itemNum}}</td>
+          <td>Quantity: {{task.quantity}}</td>
           {{/if}}
-        </tr>
+        {{/view}}
         {{/each}}
       </tbody>
     </table>

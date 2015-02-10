@@ -17,13 +17,6 @@ CRM.IndexController = Ember.ArrayController.extend({
     }
   }
 });
-CRM.TasksListController = Ember.ArrayController.extend({
-  actions:{
-    showTaskInfo: function(id){
-      $('<tr><td>yahoo</td></tr>').insertAfter('#'+id);
-    }
-  }
-});
 
 CRM.IndexRoute = Ember.Route.extend({
   model: function(){
@@ -41,6 +34,21 @@ CRM.TasksRoute = Ember.Route.extend({
   activate: function() {
     $("#tasks-label").css('background-color','#2F79B9');
     $("#customers-label").css('background-color','#78AEDC');
+  }
+});
+
+CRM.TaskView = Ember.View.extend({
+  infoExpanded: false,
+  click: function(){
+    this.toggleProperty('infoExpanded');
+    var taskText = this.task.get('text');
+    if(this.infoExpanded) {
+      $('<tr><td></td><td>'+taskText+'</td><td colspan=\'3\'></td></tr>').
+        insertAfter('#'+this.task.id).addClass('task-info');
+    }
+    else {
+      $('#'+this.task.id).next().remove();
+    }
   }
 });
 
