@@ -28,12 +28,30 @@ CRM.TasksListController = Ember.ArrayController.extend({
     if (this.taskType==='shipping') {return true;}
     else {return false;}
   }.property('taskType'),
+  clearInputs: function() {
+    this.set('customer','');
+    this.set('beginning','');
+    this.set('end','');
+    this.set('itemNum','');
+    this.set('quantity','');
+    this.set('description','');
+  },
   actions:{
-    addTask: function() {
+    showAddTask: function() {
+      this.clearInputs();
       this.toggleProperty('isNewTaskVisible');
     },
     typeSelect: function(type) {
+      this.clearInputs();
       this.set('taskType',type);
+    },
+    addTask: function() {
+      var customer = this.get('customer');
+      var beginning = this.get('beginning');
+      var description = this.get('description');
+      alert(customer+' '+beginning+' '+description);
+      this.clearInputs();
+      this.toggleProperty('isNewTaskVisible');
     }
   }
 });
