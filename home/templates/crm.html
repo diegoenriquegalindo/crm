@@ -108,7 +108,7 @@
     {%verbatim%}
     <br>
     <div id='add-btn-div'>
-      <button class="btn btn-primary" {{action 'addTask'}}>
+      <button class="btn btn-primary selected-button" {{action 'addTask'}}>
         <span class="glyphicon glyphicon-plus"> Add Task</span>
       </button>
     </div>
@@ -116,8 +116,8 @@
     {{#view 'newTask' isVisible=isNewTaskVisible}}
     <div class='col-md-8 col-md-offset-2 new-task-div'>
       <div class='col-md-3 btn-group-vertical'>
-        <button {{action 'typeSelect' 'cService'}} class="btn btn-primary">C Service</button>
-        <button {{action 'typeSelect' 'shipping'}} class="btn btn-primary unselect-button">Shipping</button>
+        <button {{action 'typeSelect' 'cService'}} {{bind-attr class=':btn :btn-primary isCService:selected-button'}}>C Service</button>
+        <button {{action 'typeSelect' 'shipping'}} {{bind-attr class=':btn :btn-primary isShipping:selected-button'}}>Shipping</button>
       </div>
       <div class='col-md-9' style='padding:0;'>
         <div class='col-md-12 input-group'>
@@ -146,8 +146,8 @@
           </div>
         </div>
         <div class='col-md-6' style='padding:0;'>
-          <div class="input-group date">
-            <span class="input-group-addon date" id="endSpan">Quantity</span>
+          <div class="input-group">
+            <span class="input-group-addon" id="endSpan">Quantity</span>
             {{input action='setBeginning' type='text' class='form-control' aria-describedby='endSpan'}}
           </div>
         </div>

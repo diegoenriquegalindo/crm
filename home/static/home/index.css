@@ -38,8 +38,12 @@ a:link {
   padding-bottom:15px;
 }
 
-.unselect-button {
+.btn.btn-primary {
   background-color: #78AEDC;
+}
+
+.btn.btn-primary.selected-button {
+  background-color: #2F79B9;
 }
 
 .vertical-align {
