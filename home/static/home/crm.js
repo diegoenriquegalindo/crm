@@ -19,12 +19,21 @@ CRM.IndexController = Ember.ArrayController.extend({
 });
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
+  taskType: 'cService',
+  isCService: function() {
+    if (this.taskType==='cService') {return true;}
+    else {return false;}
+  }.property('taskType'),
+  isShipping: function() {
+    if (this.taskType==='shipping') {return true;}
+    else {return false;}
+  }.property('taskType'),
   actions:{
     addTask: function() {
       this.toggleProperty('isNewTaskVisible');
     },
-    setBeginning: function() {
-      alert('yahooo');
+    typeSelect: function(type) {
+      this.set('taskType',type);
     }
   }
 });
@@ -72,6 +81,8 @@ CRM.NewTaskView = Ember.View.extend({
     });
   }
 });
+CRM.CServiceInputsView = Ember.View.extend({});
+CRM.ShippingInputsView = Ember.View.extend({});
 
 CRM.ApplicationAdapter = DS.FixtureAdapter.extend();
 

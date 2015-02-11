@@ -116,26 +116,42 @@
     {{#view 'newTask' isVisible=isNewTaskVisible}}
     <div class='col-md-8 col-md-offset-2 new-task-div'>
       <div class='col-md-3 btn-group-vertical'>
-        <button class="btn btn-primary">C Service</button>
-        <button class="btn btn-primary unselect-button">Shipping</button>
+        <button {{action 'typeSelect' 'cService'}} class="btn btn-primary">C Service</button>
+        <button {{action 'typeSelect' 'shipping'}} class="btn btn-primary unselect-button">Shipping</button>
       </div>
       <div class='col-md-9' style='padding:0;'>
         <div class='col-md-12 input-group'>
           <span class="input-group-addon" id="customerSpan">Customer</span>
-          {{input action='setBeginning' id='customerInput' type='text' class='form-control' aria-describedby='customerSpan'}}
+          {{input id='customerInput' type='text' class='form-control' aria-describedby='customerSpan'}}
         </div>
+        {{#view 'cServiceInputs' isVisible=isCService}}
         <div class='col-md-6' style='padding:0;'>
           <div class="input-group date">
             <span class="input-group-addon date" id="beginningSpan">Beginning</span>
-            {{input disabled='true' action='setBeginning' id='beginning' type='text' class='form-control' aria-describedby='beginningSpan'}}
+            {{input disabled='true' type='text' class='form-control' aria-describedby='beginningSpan'}}
           </div>
         </div>
         <div class='col-md-6' style='padding:0;'>
           <div class="input-group date">
             <span class="input-group-addon date" id="endSpan">End</span>
-            {{input disabled='true' action='setBeginning' id='end' type='text' class='form-control' aria-describedby='endSpan'}}
+            {{input disabled='true' type='text' class='form-control' aria-describedby='endSpan'}}
           </div>
         </div>
+        {{/view}}
+        {{#view 'shippingInputs' isVisible=isShipping}}
+        <div class='col-md-6' style='padding:0;'>
+          <div class="input-group">
+            <span class="input-group-addon" id="itemNumberSpan">Item #</span>
+            {{input action='setBeginning' type='text' class='form-control' aria-describedby='beginningSpan'}}
+          </div>
+        </div>
+        <div class='col-md-6' style='padding:0;'>
+          <div class="input-group date">
+            <span class="input-group-addon date" id="endSpan">Quantity</span>
+            {{input action='setBeginning' type='text' class='form-control' aria-describedby='endSpan'}}
+          </div>
+        </div>
+        {{/view}}
       </div>
       <div class='col-md-12' style='padding:0;'>
         {{textarea class='form-control' maxlength='140' rows='2'}}
