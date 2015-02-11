@@ -119,19 +119,25 @@
         <button class="btn btn-primary">C Service</button>
         <button class="btn btn-primary unselect-button">Shipping</button>
       </div>
-      <div class='col-md-9'>
+      <div class='col-md-9' style='padding:0;'>
         <div class='col-md-12 input-group'>
           <span class="input-group-addon" id="customerSpan">Customer</span>
           {{input action='setBeginning' id='customerInput' type='text' class='form-control' aria-describedby='customerSpan'}}
         </div>
-        <div class='input-group'>
-          <span class="input-group-addon" id="beginningSpan">Beginning</span>
-          {{input action='setBeginning' id='beginning' type='text' class='form-control' aria-describedby='beginningSpan'}}
-          <span class="input-group-addon" id="endSpan">End</span>
-          {{input action='setBeginning' id='end' type='text' class='form-control' aria-describedby='endSpan'}}
+        <div class='col-md-6' style='padding:0;'>
+          <div class="input-group date">
+            <span class="input-group-addon date" id="beginningSpan">Beginning</span>
+            {{input disabled='true' action='setBeginning' id='beginning' type='text' class='form-control' aria-describedby='beginningSpan'}}
+          </div>
+        </div>
+        <div class='col-md-6' style='padding:0;'>
+          <div class="input-group date">
+            <span class="input-group-addon date" id="endSpan">End</span>
+            {{input disabled='true' action='setBeginning' id='end' type='text' class='form-control' aria-describedby='endSpan'}}
+          </div>
         </div>
       </div>
-      <div class='col-md-12'>
+      <div class='col-md-12' style='padding:0;'>
         {{textarea class='form-control' maxlength='140' rows='2'}}
       </div>
     </div>
@@ -177,6 +183,7 @@
 <script src="/static/handlebars/handlebars.js"></script>
 <script src="/static/ember/ember.js"></script>
 <script src="/static/ember-data/ember-data.js"></script>
+<script src="/static/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
 <script src='/static/home/crm.js'></script>
 {% endblock %}
 

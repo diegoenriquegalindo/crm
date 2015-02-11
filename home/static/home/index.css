@@ -32,9 +32,10 @@ a:link {
 }
 
 .new-task-div {
+  padding-top: 15px;
   background-color: #F8F8F8;
   border-radius: 10px;
-  height: 150px;
+  padding-bottom:15px;
 }
 
 .unselect-button {

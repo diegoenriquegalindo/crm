@@ -17,9 +17,6 @@ CRM.IndexController = Ember.ArrayController.extend({
     }
   }
 });
-$(function(){
-  $('#beginning').datepicker();
-});
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
   actions:{
@@ -66,10 +63,13 @@ CRM.TaskView = Ember.View.extend({
   }
 });
 CRM.NewTaskView = Ember.View.extend({
-  isVisible: true,
-  yahoo: 'yahoo',
-  click: function() {
-    console.log(this.controller);
+  didInsertElement : function(){
+    this._super();
+    Ember.run.scheduleOnce('afterRender', this, function(){
+      $('.input-group.date').datepicker({
+        autoclose: true
+      });
+    });
   }
 });
 
