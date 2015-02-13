@@ -46,12 +46,27 @@ CRM.TasksListController = Ember.ArrayController.extend({
       this.set('taskType',type);
     },
     addTask: function() {
-      var customer = this.get('customer');
-      var beginning = this.get('beginning');
-      var description = this.get('description');
-      alert(customer+' '+beginning+' '+description);
-      this.clearInputs();
-      this.toggleProperty('isNewTaskVisible');
+      var controller = this;
+      var whenValue = null, appointValue = null;
+      if (controller.get('isCService') ){
+        whenValue    = new Date(controller.get('beginning'));
+        appointValue = new Date(controller.get('end'));
+      }
+      var task = this.store.createRecord('task',{
+        text:       controller.get('description'),
+        createAt:   new Date(),
+        isCService: controller.get('isCService'),
+        isShipping: controller.get('isShipping'),
+        when:       whenValue,
+        appoint:    appointValue,
+        itemNum:    controller.get('itemNum'),
+        quantity:   controller.get('quantity'),
+        customer:   this.store.find('customer',1)
+      });
+      task.save().then(function(){
+        controller.clearInputs();
+        controller.toggleProperty('isNewTaskVisible');
+      });
     }
   }
 });
