@@ -6,12 +6,11 @@ from home.views import home_view
 from home.views import login_view, logout_view
 from home.views import messages_view, settings_view
 from rest_framework import routers
-from home.views import UserViewSet
-from home.views import GroupViewSet
+from home.views import CustomerViewSet, TaskViewSet
 
 router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'groups', GroupViewSet)
+router.register(r'customers',CustomerViewSet)
+router.register(r'tasks',TaskViewSet)
 
 urlpatterns = patterns('',
         (r'^$',home_view),

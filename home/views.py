@@ -3,9 +3,9 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.contrib.auth.models import User
-from django.contrib.auth.models import Group
 from rest_framework import viewsets
-from home.serializers import UserSerializer, GroupSerializer
+from home.models import Customer, Task
+from home.serializers import CustomerSerializer, TaskSerializer
 
 def get_loggedin_context(request):
     c = {}
@@ -54,17 +54,16 @@ def settings_view(request):
     else:
         return render_to_response("no_access.html",c)
 
-class UserViewSet(viewsets.ModelViewSet):
+class CustomerViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = Customer.objects.all()
+    serializer_class = CustomerSerializer
 
-
-class GroupViewSet(viewsets.ModelViewSet):
+class TaskViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint that allows users to be viewed or edited.
     """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
