@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 class Customer(models.Model):
     owner = models.ManyToManyField('auth.User',related_name='customers')
-    customer_id = models.DecimalField(max_digits=8,decimal_places=0)
+    customer_id = models.DecimalField(max_digits=10,decimal_places=0)
     name = models.CharField(max_length=40)
     contact = models.CharField(max_length=40)
     position = models.CharField(max_length=40)

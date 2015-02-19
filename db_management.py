@@ -1,6 +1,6 @@
 import pickle
 from django.contrib.auth.models import User
-from home.models import Employee
+from home.models import Employee, Customer
 from sets import Set
 
 def get_username(first_name):
@@ -31,8 +31,13 @@ def add_employee(employee):
     new_employee.commission = commission
     new_employee.save()
 
-def add_customer():
-    pass
+def add_customer(customer):
+    new_customer = Customer()
+    new_customer.customer_id = int(customer[0])
+    new_customer.name = customer[1]
+    new_customer.contact = customer[4]
+    new_customer.position = customer[5]
+    new_customer.save()
 
 f = open("vendedores.pkl")
 employees = pickle.load(f)
@@ -41,3 +46,12 @@ for employee in employees[1]:
     if employee[0] == 'ND': continue
     add_employee(employee)
 
+f.close()
+
+f = open("listaClientes00.pkl")
+customers = pickle.load(f)
+print len(customers[1])
+for customer in customers[1]:
+    add_customer(customer)
+
+f.close()
