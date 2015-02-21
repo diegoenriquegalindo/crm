@@ -35,11 +35,12 @@ def add_customer(customer):
     new_customer.contact = customer[4]
     new_customer.position = customer[5]
     new_customer.save()
-    # new_customer.owner = User.objects.filter(username='pagalin')
-    # new_customer.save()
 
-def join_customer_vendor():
-    pass
+def join_customer_vendor(cv_pair):
+    temp_customer = Customer.objects.get(customer_id=cv_pair[0])
+    temp_vendor = Vendor.objects.get(vendor_id=cv_pair[1])
+    temp_customer.owner.add(temp_vendor)
+    temp_customer.save()
 
 f = open("vendedores.pkl")
 vendors = pickle.load(f)
@@ -57,9 +58,11 @@ for customer in customers[1]:
 
 f.close()
 
-# f = open("listaClientes00.pkl")
-# customers = pickle.load(f)
-# add_customer(customers[1][0])
+# f = open("cliente_vendedor.pkl")
+# cv_pairs = pickle.load(f)
+# for cv_pair in cv_pairs[1]:
+#     if cv_pair[1] == 'ND':continue
+#     join_customer_vendor(cv_pair)
 
 # f.close()
 
