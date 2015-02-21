@@ -2,9 +2,8 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
-from django.contrib.auth.models import User
 from rest_framework import viewsets
-from home.models import Customer, Task
+from home.models import Customer, Task, Vendor
 from home.serializers import CustomerSerializer, TaskSerializer
 
 def get_loggedin_context(request):
@@ -13,9 +12,8 @@ def get_loggedin_context(request):
     c["logged_in"] = request.user.is_authenticated()
     c["customer_list"] = []
     if c["logged_in"]:
-        user_obj = User.objects.get(username=str(request.user.username))
+        user_obj = Vendor.objects.get(username=str(request.user.username))
         c["username"] = user_obj.username
-        c["customer_list"] = user_obj.employee.customers.all()
     return c
 
 def home_view(request):

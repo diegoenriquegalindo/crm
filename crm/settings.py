@@ -164,6 +164,8 @@ LOGGING = {
     }
 }
 
+AUTH_USER_MODEL = 'home.Vendor'
+
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
     'PAGINATE_BY': 10
