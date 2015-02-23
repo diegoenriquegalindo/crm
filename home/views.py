@@ -63,15 +63,15 @@ class CustomerViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,CustomerPermission,)
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
-    lookup_url_kwarg = 'customer_id'
-    lookup_field = 'customer_id'
+    lookup_url_kwarg = 'id'
+    lookup_field = 'id'
 
     def list(self,request):
         queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-    def retrieve(self,request,customer_id=None):
+    def retrieve(self,request,id=None):
         customer = self.get_object()
         serializer = self.serializer_class(customer)
         return Response(serializer.data)
@@ -82,7 +82,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
         print search
         if search is not None:
             queryset = queryset.filter(\
-                    Q(customer_id__contains=search) |\
+                    Q(id__contains=search) |\
                     Q(name__contains=search) |\
                     Q(contact__contains=search) |\
                     Q(position__contains=search) )

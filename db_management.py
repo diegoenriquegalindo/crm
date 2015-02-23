@@ -30,14 +30,14 @@ def add_vendor(vendor):
 
 def add_customer(customer):
     new_customer = Customer()
-    new_customer.customer_id = int(customer[0])
+    new_customer.id = int(customer[0])
     new_customer.name = customer[1]
     new_customer.contact = customer[4]
     new_customer.position = customer[5]
     new_customer.save()
 
 def join_customer_vendor(cv_pair):
-    temp_customer = Customer.objects.get(customer_id=cv_pair[0])
+    temp_customer = Customer.objects.get(id=cv_pair[0])
     temp_vendor = Vendor.objects.get(vendor_id=cv_pair[1])
     temp_customer.owner.add(temp_vendor)
     temp_customer.save()
