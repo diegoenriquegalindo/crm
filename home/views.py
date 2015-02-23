@@ -2,6 +2,7 @@ from django.shortcuts import render_to_response
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
+from django.core.paginator import Paginator
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from home.models import Customer, Task, Vendor
@@ -65,7 +66,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     lookup_field = 'customer_id'
 
     def list(self,request):
-        queryset = Customer.objects.filter(owner=request.user)
+        queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
@@ -73,6 +74,19 @@ class CustomerViewSet(viewsets.ModelViewSet):
         customer = self.get_object()
         serializer = self.serializer_class(customer)
         return Response(serializer.data)
+
+    def get_queryset(self):
+        queryset = Customer.objects.filter(owner=self.request.user)
+        page = self.request.QUERY_PARAMS.get('page', None)
+        if page is not None:
+            try: page = int(page)
+            except ValueError: page = None
+            if page == None: queryset = []
+            else:
+                paginator = Paginator(queryset,5)
+                try: queryset = paginator.page(page).object_list
+                except: queryset = []
+        return queryset
 
 class TaskViewSet(viewsets.ModelViewSet):
     """
