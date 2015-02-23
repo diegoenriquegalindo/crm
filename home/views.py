@@ -3,6 +3,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core.paginator import Paginator
+from django.db.models import Q
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from home.models import Customer, Task, Vendor
@@ -77,6 +78,14 @@ class CustomerViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Customer.objects.filter(owner=self.request.user)
+        search = self.request.QUERY_PARAMS.get('search',None)
+        print search
+        if search is not None:
+            queryset = queryset.filter(\
+                    Q(customer_id__contains=search) |\
+                    Q(name__contains=search) |\
+                    Q(contact__contains=search) |\
+                    Q(position__contains=search) )
         page = self.request.QUERY_PARAMS.get('page', None)
         if page is not None:
             try: page = int(page)
