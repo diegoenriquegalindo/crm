@@ -4,7 +4,6 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from rest_framework import viewsets, permissions
 from rest_framework.response import Response
-from rest_framework.decorators import detail_route
 from home.models import Customer, Task, Vendor
 from home.serializers import CustomerSerializer, TaskSerializer
 from home.permissions import CustomerPermission
@@ -62,14 +61,15 @@ class CustomerViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticated,CustomerPermission,)
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
+    lookup_url_kwarg = 'customer_id'
+    lookup_field = 'customer_id'
 
     def list(self,request):
         queryset = Customer.objects.filter(owner=request.user)
         serializer = self.serializer_class(queryset, many=True)
         return Response(serializer.data)
 
-    @detail_route()
-    def show_customer(self,request,pk=None):
+    def retrieve(self,request,customer_id=None):
         customer = self.get_object()
         serializer = self.serializer_class(customer)
         return Response(serializer.data)
