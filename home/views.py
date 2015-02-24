@@ -65,11 +65,15 @@ class CustomerViewSet(viewsets.ModelViewSet):
     serializer_class = CustomerSerializer
     lookup_url_kwarg = 'id'
     lookup_field = 'id'
+    resource_name = False
 
     def list(self,request):
         queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        data = {'customer':serializer.data}
+        if 'num_pages' in queryset.__dict__:
+            data['meta'] = {'num_pages':queryset.num_pages}
+        return Response(data)
 
     def retrieve(self,request,id=None):
         customer = self.get_object()
@@ -79,7 +83,6 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Customer.objects.filter(owner=self.request.user)
         search = self.request.QUERY_PARAMS.get('search',None)
-        print search
         if search is not None:
             queryset = queryset.filter(\
                     Q(id__contains=search) |\
@@ -92,9 +95,12 @@ class CustomerViewSet(viewsets.ModelViewSet):
             except ValueError: page = None
             if page == None: queryset = []
             else:
-                paginator = Paginator(queryset,5)
-                try: queryset = paginator.page(page).object_list
-                except: queryset = []
+                paginator = Paginator(queryset,12)
+                try:
+                    queryset = paginator.page(page).object_list
+                except:
+                    queryset = Customer.objects.none()
+                queryset.num_pages = paginator.num_pages
         return queryset
 
 class TaskViewSet(viewsets.ModelViewSet):
