@@ -11,31 +11,36 @@ CRM.Router.map(function(){
 });
 
 CRM.IndexController = Ember.ArrayController.extend({
+  queryParams: ['page'],
+  page: 1,
   actions:{
     customerSelect: function(id){
       this.transitionToRoute('customer',id);
     },
     pageSelect: function(page) {
-      this.currentPage = page;
+      this.set('page',page);
+      this.transitionToRoute({queryParams: {page: 'page'}});
     }
   },
-
-  buttonArray: [
-    {number:"0",isVisible:true,isSelected:false},
-    {number:"1",isVisible:true,isSelected:true},
-    {number:"2",isVisible:true,isSelected:false},
-    {number:"3",isVisible:true,isSelected:false},
-    {number:"4",isVisible:true,isSelected:false},
-    {number:"5",isVisible:false,isSelected:false},
-    {number:"6",isVisible:false,isSelected:false}
-  ],
-  currentPage: 1,
-  customers: function() {
-    return this.store.find('customer',{page:this.currentPage});
-  }.property('currentPage'),
   numPages: function() {
-    return this.store.metadataFor('customer',{page:this.currentPage}).num_pages;
-  }.property()
+    return this.store.metadataFor('customer',{page:1}).num_pages;
+  }.property('buttonArray'),
+  buttonArray: function() {
+    var bArray = Array(7);
+    var numPages = this.get('numPages');
+    var page = this.get('page');
+    numPages = this.store.metadataFor('customer',{page:1}).num_pages;
+    var notVisible = 7 - numPages;
+    for(var i=0;i<numPages;i++) {
+      var isSelected = false;
+      if(i===page-1) isSelected = true;
+      bArray[i] = {number:String(i+1),isVisible:true,isSelected:isSelected};
+    }
+    return bArray;
+  }.property('page'),
+  customers: function() {
+    return this.store.find('customer',{page:this.page});
+  }.property('page')
 });
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
@@ -92,6 +97,12 @@ CRM.TasksListController = Ember.ArrayController.extend({
 });
 
 CRM.IndexRoute = Ember.Route.extend({
+  queryParams: {
+    page:{refreshModel:true}
+  },
+  model: function(params) {
+    return this.store.find('customer',{page:params.page});
+  },
   activate: function() {
     $("#customers-label").css('background-color','#2F79B9');
     $("#tasks-label").css('background-color','#78AEDC');

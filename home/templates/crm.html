@@ -32,7 +32,7 @@
   <p>{{username}}</p>
 </div>
 
-<div id='content' class='col-md-9' style='background-color:#D3E9FC'>
+<div id='content' class='col-md-9' style='background-color:#D3E9FC;'>
   {% block content %}
   <script type='text/x-handlebars' data-template-name='application'>
     {% verbatim %}
@@ -55,6 +55,7 @@
 
   <script type='text/x-handlebars' data-template-name='index'>
     {%verbatim%}
+    <div style='height:550px;'>
     <table class="table">
       <thead>
         <tr>
@@ -64,7 +65,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each customer in customers}}
+        {{#each customer in model}}
         <tr class='hover' {{action 'customerSelect' customer.id}}>
           <td>{{customer.id}}</td>
           <td>{{customer.name}}</td>
@@ -73,6 +74,7 @@
         {{/each}}
       </tbody>
     </table>
+    </div>
     {{partial 'paginationFooter'}}
     {%endverbatim%}
   </script>
@@ -205,7 +207,7 @@
         <div class="btn-group" role="group" aria-label="...">
           {{#each button in buttonArray}}
           {{#if button.isVisible}}
-          <button {{bind-attr class=':btn :btn-primary button.isSelected:selected-button'}}>
+          <button {{action 'pageSelect' button.number}} {{bind-attr class=':btn :btn-primary button.isSelected:selected-button'}}>
             {{button.number}}
           </button>
           {{/if}}
