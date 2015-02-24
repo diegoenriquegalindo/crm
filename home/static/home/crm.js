@@ -14,8 +14,28 @@ CRM.IndexController = Ember.ArrayController.extend({
   actions:{
     customerSelect: function(id){
       this.transitionToRoute('customer',id);
+    },
+    pageSelect: function(page) {
+      this.currentPage = page;
     }
-  }
+  },
+
+  buttonArray: [
+    {number:"0",isVisible:true,isSelected:false},
+    {number:"1",isVisible:true,isSelected:true},
+    {number:"2",isVisible:true,isSelected:false},
+    {number:"3",isVisible:true,isSelected:false},
+    {number:"4",isVisible:true,isSelected:false},
+    {number:"5",isVisible:false,isSelected:false},
+    {number:"6",isVisible:false,isSelected:false}
+  ],
+  currentPage: 1,
+  customers: function() {
+    return this.store.find('customer',{page:this.currentPage});
+  }.property('currentPage'),
+  numPages: function() {
+    return this.store.metadataFor('customer',{page:this.currentPage}).num_pages;
+  }.property()
 });
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
@@ -72,9 +92,6 @@ CRM.TasksListController = Ember.ArrayController.extend({
 });
 
 CRM.IndexRoute = Ember.Route.extend({
-  model: function(){
-    return this.store.findAll('customer');
-  },
   activate: function() {
     $("#customers-label").css('background-color','#2F79B9');
     $("#tasks-label").css('background-color','#78AEDC');
