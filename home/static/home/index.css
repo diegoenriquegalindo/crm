@@ -15,11 +15,11 @@ a:link {
   border-radius: 10px;
 }
 
-#tasks-label {
+.label.label-primary {
   background-color: #78AEDC;
 }
 
-#tasks-label:hover , #customers-label:hover {
+.label.label-primary:hover {
   color :#E7E7E7;
 }
 
@@ -42,7 +42,7 @@ a:link {
   background-color: #78AEDC;
 }
 
-.btn.btn-primary.selected-button {
+.btn.btn-primary.selected-button, .label.label-primary.selected-label {
   background-color: #2F79B9;
 }
 

@@ -11,6 +11,7 @@ CRM.Router.map(function(){
 });
 
 CRM.IndexController = Ember.ArrayController.extend({
+  isIndex: true,
   queryParams: ['page'],
   page: 1,
   actions:{
@@ -89,6 +90,12 @@ CRM.IndexController = Ember.ArrayController.extend({
     return this.store.find('customer',{page:this.page});
   }.property('page')
 });
+CRM.TasksController = Ember.Controller.extend({
+  isTasks: true
+});
+CRM.CustomerController = Ember.Controller.extend({
+   isIndex: true
+});
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
   taskType: 'cService',
@@ -150,10 +157,6 @@ CRM.IndexRoute = Ember.Route.extend({
   model: function(params) {
     return this.store.find('customer',{page:params.page});
   },
-  activate: function() {
-    $("#customers-label").css('background-color','#2F79B9');
-    $("#tasks-label").css('background-color','#78AEDC');
-  }
 });
 CRM.TasksRoute = Ember.Route.extend({
   model: function() {

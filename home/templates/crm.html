@@ -36,25 +36,34 @@
   {% block content %}
   <script type='text/x-handlebars' data-template-name='application'>
     {% verbatim %}
+    {{outlet}}
+    {% endverbatim %}
+  </script>
+
+  <script data-template-name="_buttonSearchHeader" type="text/x-handlebars">
+    {% verbatim %}
     <h3>
       {{#link-to 'index'}}
-      <span id='customers-label' class='label label-primary'>
+      <span {{bind-attr class=':label :label-primary isIndex:selected-label'}}>
         Customers
       </span>
       {{/link-to}}
       {{#link-to 'tasks'}}
-      <span id='tasks-label' class='label label-default'>
+      <span {{bind-attr class=':label :label-primary isTasks:selected-label'}}>
         Tasks
       </span>
       {{/link-to}}
     </h3>
-    {{input}}
-    {{outlet}}
+    <div class="col-md-6 input-group">
+      <span class="input-group-addon" id="sizing-addon1">Search </span>
+      {{input action='search' type='text' classNames='form-control'}}
+    </div>
     {% endverbatim %}
   </script>
 
   <script type='text/x-handlebars' data-template-name='index'>
     {%verbatim%}
+    {{partial 'buttonSearchHeader'}}
     <div style='height:550px;'>
     <table class="table">
       <thead>
@@ -81,6 +90,7 @@
 
   <script data-template-name="customer" type="text/x-handlebars">
     {%verbatim%}
+    {{partial 'buttonSearchHeader'}}
     <table class='table'>
       <thead>
         <tr>
@@ -103,6 +113,7 @@
 
   <script type='text/x-handlebars' data-template-name='tasks'>
     {%verbatim%}
+    {{partial 'buttonSearchHeader'}}
     {{render 'tasks_list' model}}
     {%endverbatim%}
   </script>
