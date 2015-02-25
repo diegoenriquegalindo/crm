@@ -18,23 +18,56 @@ CRM.IndexController = Ember.ArrayController.extend({
       this.transitionToRoute('customer',id);
     },
     pageSelect: function(page) {
+      if (page==='...') return;
       this.set('page',page);
       this.transitionToRoute({queryParams: {page: 'page'}});
     }
   },
   numPages: function() {
-    return this.store.metadataFor('customer',{page:1}).num_pages;
+    return this.store.metadataFor('customer',{page:this.get('page')}).num_pages;
   }.property('buttonArray'),
   buttonArray: function() {
-    var bArray = Array(7);
+    var buttonAmount = 7;
+    var visibleLimit = 5;
+    var bArray = Array(buttonAmount);
     var numPages = this.get('numPages');
     var page = this.get('page');
-    numPages = this.store.metadataFor('customer',{page:1}).num_pages;
-    var notVisible = 7 - numPages;
-    for(var i=0;i<numPages;i++) {
-      var isSelected = false;
-      if(i===page-1) isSelected = true;
-      bArray[i] = {number:String(i+1),isVisible:true,isSelected:isSelected};
+    for(var i=0;i<buttonAmount;i++) {
+      bArray[i] = {number:String(i+1),isVisible:true,
+        isSelected:false,clickable:true};
+    }
+    if (numPages<=visibleLimit) {
+      var notVisible = buttonAmount - numPages - 1;
+      for(var i = buttonAmount-1;i>=notVisible;i--) {
+        bArray[i].isVisible = false;
+      }
+      bArray[page-1].isSelected = true;
+    }
+    else {
+      bArray[buttonAmount-1].number = String(numPages);
+      if(page<visibleLimit-1) {
+        for(var i=visibleLimit-1;i<buttonAmount-1;i++) {
+          bArray[i].number = '...';bArray[i].clickable = false;
+        }
+        bArray[page-1].isSelected = true;
+      }
+      else if(page>=numPages-2) {
+        for(var i=1;i<3;i++) {
+          bArray[i].number = '...'; bArray[i].clickable = false;
+        }
+        for(var i=3;i<buttonAmount;i++) {
+          bArray[i].number = String(i+numPages-6);
+          if(page == bArray[i].number) bArray[i].isSelected = true;
+        }
+      }
+      else {
+        bArray[1].number = "..."; bArray[1].clickable = false;
+        bArray[2].number = String(page-1);
+        bArray[3].number = String(page); bArray[3].isSelected = true;
+        bArray[4].number = String(page+1);
+        bArray[5].number = "..."; bArray[5].clickable = false;
+        bArray[6].number = String(numPages);
+      }
     }
     return bArray;
   }.property('page'),

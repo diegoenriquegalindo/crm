@@ -207,7 +207,9 @@
         <div class="btn-group" role="group" aria-label="...">
           {{#each button in buttonArray}}
           {{#if button.isVisible}}
-          <button {{action 'pageSelect' button.number}} {{bind-attr class=':btn :btn-primary button.isSelected:selected-button'}}>
+          <button {{action 'pageSelect' button.number}}
+                  {{bind-attr class=':btn :btn-primary button.isSelected:selected-button'}}
+                  >
             {{button.number}}
           </button>
           {{/if}}
