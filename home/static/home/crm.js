@@ -21,6 +21,21 @@ CRM.IndexController = Ember.ArrayController.extend({
       if (page==='...') return;
       this.set('page',page);
       this.transitionToRoute({queryParams: {page: 'page'}});
+    },
+    prevNextSelect: function(prevNext) {
+      if (this.get('numPages')===1) return;
+      var nextPage = 0;
+      var page = this.get('page');
+      if (prevNext === 'prev') {
+        if (page===1) return;
+        nextPage = page-1;
+      }
+      else {
+        if (page===this.get('numPages')) return;
+        nextPage = page+1;
+      }
+      this.set('page',nextPage);
+      this.transitionToRoute({queryParams: {page: 'page'}});
     }
   },
   numPages: function() {
@@ -37,8 +52,7 @@ CRM.IndexController = Ember.ArrayController.extend({
         isSelected:false,clickable:true};
     }
     if (numPages<=visibleLimit) {
-      var notVisible = buttonAmount - numPages - 1;
-      for(var i = buttonAmount-1;i>=notVisible;i--) {
+      for(var i = buttonAmount-1;i>=numPages;i--) {
         bArray[i].isVisible = false;
       }
       bArray[page-1].isSelected = true;

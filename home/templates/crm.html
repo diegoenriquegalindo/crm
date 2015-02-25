@@ -197,12 +197,12 @@
 
   <script data-template-name="_paginationFooter" type="text/x-handlebars">
     {%verbatim%}
-    <div class='col-md-3 col-md-offset-1'>
-      <button class="btn btn-primary selected-button">
+    <div class='col-md-3'>
+      <button {{action 'prevNextSelect' 'prev'}}class="btn btn-primary selected-button">
         <span class="glyphicon glyphicon-chevron-left"> Previous Page </span>
       </button>
     </div>
-    <div class='col-md-4'>
+    <div class='col-md-6'>
       <div class="btn-toolbar" role="toolbar" aria-label="...">
         <div class="btn-group" role="group" aria-label="...">
           {{#each button in buttonArray}}
@@ -218,11 +218,9 @@
       </div>
     </div>
     <div class='col-md-3'>
-      <button class="btn btn-primary selected-button">
+      <button {{action 'prevNextSelect' 'next'}} class="btn btn-primary selected-button">
         <span class="glyphicon glyphicon-chevron-right"> Next Page </span>
       </button>
-    </div>
-    <div class='col-md-1'>
     </div>
     <div class='col-md-12' style="height:20px;"></div>
     {%endverbatim%}
