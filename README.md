@@ -8,7 +8,7 @@ It requires python and bower.
 ## Installation
 Once the repository is cloned:
 
-virtual env
+virtualenv venv
 
 source env/bin/activate
 

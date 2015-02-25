@@ -12,8 +12,10 @@ CRM.Router.map(function(){
 
 CRM.IndexController = Ember.ArrayController.extend({
   isIndex: true,
-  queryParams: ['page'],
+  queryParams: ['page','search'],
   page: 1,
+  search: "",
+  text: "",
   actions:{
     customerSelect: function(id){
       this.transitionToRoute('customer',id);
@@ -37,11 +39,20 @@ CRM.IndexController = Ember.ArrayController.extend({
       }
       this.set('page',nextPage);
       this.transitionToRoute({queryParams: {page: 'page'}});
+    },
+    search: function() {
+      this.set('page',1);
+      var text = this.get('text').toString();
+      console.log(typeof( text ));
+      var controller = this;
+      Ember.run.next(function(){
+        controller.transitionToRoute("index",{ queryParams: {page:1, search:text} });
+      });
     }
   },
   numPages: function() {
     return this.store.metadataFor('customer',{page:this.get('page')}).num_pages;
-  }.property('buttonArray'),
+  }.property('model'),
   buttonArray: function() {
     var buttonAmount = 7;
     var visibleLimit = 5;
@@ -85,10 +96,7 @@ CRM.IndexController = Ember.ArrayController.extend({
       }
     }
     return bArray;
-  }.property('page'),
-  customers: function() {
-    return this.store.find('customer',{page:this.page});
-  }.property('page')
+  }.property('model'),
 });
 CRM.TasksController = Ember.Controller.extend({
   isTasks: true
@@ -152,10 +160,11 @@ CRM.TasksListController = Ember.ArrayController.extend({
 
 CRM.IndexRoute = Ember.Route.extend({
   queryParams: {
-    page:{refreshModel:true}
+    page:{refreshModel:true},
+    search:{refreshModel:true}
   },
   model: function(params) {
-    return this.store.find('customer',{page:params.page});
+    return this.store.find('customer',{page:params.page,search:params.search});
   },
 });
 CRM.TasksRoute = Ember.Route.extend({

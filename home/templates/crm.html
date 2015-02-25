@@ -56,7 +56,7 @@
     </h3>
     <div class="col-md-6 input-group">
       <span class="input-group-addon" id="sizing-addon1">Search </span>
-      {{input action='search' type='text' classNames='form-control'}}
+      {{input valueBinding='text' action='search' type='text' classNames='form-control'}}
     </div>
     {% endverbatim %}
   </script>
@@ -101,9 +101,9 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{id}}</td>
-          <td>{{name}}</td>
-          <td>{{contact}}</td>
+          <td>{{model.id}}</td>
+          <td>{{model.name}}</td>
+          <td>{{model.contact}}</td>
         </tr>
       </tbody>
     </table>
