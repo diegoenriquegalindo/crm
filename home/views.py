@@ -8,7 +8,7 @@ from rest_framework import viewsets, permissions
 from rest_framework.response import Response
 from home.models import Customer, Task, Vendor
 from home.serializers import CustomerSerializer, TaskSerializer
-from home.permissions import CustomerPermission
+from home.permissions import CustomerPermission, TaskPermission
 
 def get_loggedin_context(request):
     c = {}
@@ -107,5 +107,51 @@ class TaskViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.
     """
+    permission_classes = (permissions.IsAuthenticated,TaskPermission,)
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    lookup_url_kwarg = 'id'
+    lookup_field = 'id'
+    resource_name = False
+
+    def list(self,request):
+        queryset = self.get_queryset()
+        serializer = self.serializer_class(queryset,\
+                context={'request':request}, many=True)
+        data = {'task':serializer.data}
+        if 'num_pages' in queryset.__dict__:
+            data['meta'] = {'num_pages':queryset.num_pages}
+        return Response(data)
+
+    def retrieve(self,request,id=None):
+        task = self.get_object()
+        serializer = self.serializer_class(task)
+        return Response(serializer.data)
+
+    def get_queryset(self):
+        queryset = Task.objects.filter(owner=self.request.user)
+        search = self.request.QUERY_PARAMS.get('search',None)
+        if search is not None:
+            queryset = queryset.filter(\
+                    Q(id__contains=search) |\
+                    Q(text__contains=search) |\
+                    Q(createAt__contains=search) |\
+                    Q(taskType__contains=search) |\
+                    Q(when__contains=search) |\
+                    Q(appoint__contains=search) |\
+                    Q(serialNumber__contains=search) |\
+                    Q(partNumber__contains=search) |\
+                    Q(quantity__contains=search) )
+        page = self.request.QUERY_PARAMS.get('page', None)
+        if page is not None:
+            try: page = int(page)
+            except ValueError: page = None
+            if page == None: queryset = []
+            else:
+                paginator = Paginator(queryset,12)
+                try:
+                    queryset = paginator.page(page).object_list
+                except:
+                    queryset = Task.objects.none()
+                queryset.num_pages = paginator.num_pages
+        return queryset

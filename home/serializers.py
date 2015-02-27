@@ -1,14 +1,14 @@
 from home.models import Customer, Task
 from rest_framework import serializers
 
-class CustomerSerializer(serializers.HyperlinkedModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('id','name','contact','position')
 
-class TaskSerializer(serializers.HyperlinkedModelSerializer):
+class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('text','createAt','isCService','isShipping','when',\
-                'appoint','itemNum','quantity','customer')
-
+        fields = ('id','owner','text','createAt',\
+                'taskType','when','appoint','serialNumber',\
+                'partNumber','quantity','customer')
