@@ -9,6 +9,6 @@ class CustomerSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = ('id','owner','text','createAt',\
-                'taskType','when','appoint','serialNumber',\
-                'partNumber','quantity','customer')
+        fields = ('id','owner','text','createdAt',\
+                'taskType','begin','end','amount',\
+                'didPay','orderNumber','customer')

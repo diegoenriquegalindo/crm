@@ -3,9 +3,9 @@ from django.contrib.auth.models import User, AbstractUser
 
 class Customer(models.Model):
     owner = models.ManyToManyField('home.Vendor',related_name='customers')
-    name = models.CharField(max_length=40)
-    contact = models.CharField(max_length=40)
-    position = models.CharField(max_length=40)
+    name = models.CharField(max_length=100)
+    contact = models.CharField(max_length=60)
+    position = models.CharField(max_length=60)
     def __unicode__(self):
         return self.name
 
@@ -18,13 +18,13 @@ class Vendor(AbstractUser):
 class Task(models.Model):
     owner = models.ForeignKey('home.Vendor',related_name='tasks')
     text = models.CharField(max_length=140)
-    createAt = models.DateTimeField()
+    createdAt = models.DateTimeField()
     taskType = models.CharField(max_length=11)
-    when = models.DateTimeField()
-    appoint = models.DateTimeField()
-    serialNumber = models.CharField(max_length=30)
-    partNumber = models.CharField(max_length=30)
-    quantity = models.DecimalField(max_digits=3,decimal_places=0)
+    begin = models.DateTimeField()
+    end = models.DateTimeField()
+    amount = models.DecimalField(max_digits=11,decimal_places=2)
+    didPay = models.BooleanField()
+    orderNumber = models.CharField(max_length=20)
     customer = models.OneToOneField(Customer)
     def __unicode__(self):
         return self.owner.username + "-" + self.customer.name
