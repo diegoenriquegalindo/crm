@@ -4,8 +4,10 @@ from django.http import HttpResponseRedirect
 from django.core.context_processors import csrf
 from django.core.paginator import Paginator
 from django.db.models import Q
-from rest_framework import viewsets, permissions
+from django.utils.six import BytesIO
+from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
 from home.models import Customer, Task, Vendor
 from home.serializers import CustomerSerializer, TaskSerializer
 from home.permissions import CustomerPermission, TaskPermission
@@ -126,6 +128,21 @@ class TaskViewSet(viewsets.ModelViewSet):
         task = self.get_object()
         serializer = self.serializer_class(task)
         return Response(serializer.data)
+
+    def create(self,request):
+        if request.is_ajax():
+            stream = BytesIO(request.body)
+            data = JSONParser().parse(stream)
+            serializer = self.serializer_class(data=data['task'])
+            if serializer.is_valid():
+                new_task = serializer.save()
+                new_task.save()
+                return Response(data={'task':serializer.data},\
+                        status=status.HTTP_201_CREATED)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return super(TaskViewSet,self).create(request)
 
     def get_queryset(self):
         queryset = Task.objects.filter(owner=self.request.user)
