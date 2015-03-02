@@ -1,3 +1,40 @@
+$(document).ajaxSend(function(event, xhr, settings) {
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    function sameOrigin(url) {
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+    function safeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+    }
+});
+
 var CRM = Ember.Application.create({
   rootElement:     '#content',
   LOG_TRANSITIONS: true
@@ -10,6 +47,14 @@ CRM.Router.map(function(){
   this.resource('customer',{path:'/:customer_id'});
 });
 
+var searchFunction = function() {
+  this.set('page',1);
+  var text = this.get('text').toString();
+  var controller = this;
+  Ember.run.next(function(){
+    controller.transitionToRoute({ queryParams: {page:1, search:text} });
+  });
+};
 CRM.IndexController = Ember.ArrayController.extend({
   isIndex: true,
   queryParams: ['page','search'],
@@ -40,15 +85,7 @@ CRM.IndexController = Ember.ArrayController.extend({
       this.set('page',nextPage);
       this.transitionToRoute({queryParams: {page: 'page'}});
     },
-    search: function() {
-      this.set('page',1);
-      var text = this.get('text').toString();
-      console.log(typeof( text ));
-      var controller = this;
-      Ember.run.next(function(){
-        controller.transitionToRoute("index",{ queryParams: {page:1, search:text} });
-      });
-    }
+    search: searchFunction
   },
   numPages: function() {
     return this.store.metadataFor('customer',{page:this.get('page')}).num_pages;
@@ -102,7 +139,7 @@ CRM.TasksController = Ember.Controller.extend({
   isTasks: true
 });
 CRM.CustomerController = Ember.Controller.extend({
-   isIndex: true
+  isIndex: true
 });
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
@@ -204,7 +241,15 @@ CRM.NewTaskView = Ember.View.extend({
 CRM.CServiceInputsView = Ember.View.extend({});
 CRM.ShippingInputsView = Ember.View.extend({});
 
-CRM.ApplicationAdapter = DS.RESTAdapter.extend();
+CRM.ApplicationAdapter = DS.RESTAdapter.extend({
+  buildURL: function() {
+    var url = this._super.apply(this, arguments);
+    if (url.charAt(url.length -1) !== '/') {
+      url += '/';
+    }
+    return url;
+  }
+});
 
 CRM.Customer = DS.Model.extend({
   name:     DS.attr('string'),
