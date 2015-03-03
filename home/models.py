@@ -25,7 +25,7 @@ class Task(models.Model):
     amount = models.DecimalField(max_digits=11,decimal_places=2)
     didPay = models.BooleanField()
     orderNumber = models.CharField(max_length=20)
-    customer = models.OneToOneField(Customer)
+    customer = models.ForeignKey(Customer)
     def __unicode__(self):
         return self.owner.username + "-" + self.customer.name
 

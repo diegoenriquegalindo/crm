@@ -207,10 +207,6 @@ CRM.IndexRoute = Ember.Route.extend({
 CRM.TasksRoute = Ember.Route.extend({
   model: function() {
     return this.store.findAll('task');
-  },
-  activate: function() {
-    $("#tasks-label").css('background-color','#2F79B9');
-    $("#customers-label").css('background-color','#78AEDC');
   }
 });
 
@@ -253,22 +249,23 @@ CRM.ApplicationAdapter = DS.RESTAdapter.extend({
 
 CRM.Customer = DS.Model.extend({
   name:     DS.attr('string'),
-  detail:   DS.attr('number'),
   contact:  DS.attr('string'),
   position: DS.attr('string'),
-  username: DS.attr('string'),
-  tasks:    DS.hasMany('task',{async:true})
 });
 
 CRM.Task = DS.Model.extend({
-  text:       DS.attr('string'),
-  createAt:   DS.attr('date'),
-  isCService: DS.attr('boolean'),
-  isShipping: DS.attr('boolean'),
-  when:       DS.attr('date'),
-  appoint:    DS.attr('date'),
-  itemNum:    DS.attr('string'),
-  quantity:   DS.attr('number'),
-  customer:   DS.belongsTo('customer', {async:true})
+  owner:        DS.attr('number'),
+  text:         DS.attr('string'),
+  createdAt:    DS.attr('date'),
+  taskType:     DS.attr('string'),
+  begin:        DS.attr('date'),
+  end:          DS.attr('date'),
+  amount:       DS.attr('number'),
+  didPay:       DS.attr('boolean'),
+  orderNumber:  DS.attr('string'),
+  customer:     DS.belongsTo('customer')
 });
 
+Ember.Handlebars.registerBoundHelper('niceDate',function(date) {
+  return moment(date).format('ddd, MMMM DD YYYY');
+});
