@@ -128,21 +128,36 @@
     </div>
     <br>
     {{#view 'newTask' isVisible=isNewTaskVisible}}
-    <div class='col-md-8 col-md-offset-2 new-task-div'>
+    <div class='col-md-7 new-task-div'>
       <div class='col-md-3 btn-group-vertical'>
-        <button {{action 'typeSelect' 'cService'}} {{bind-attr class=':btn :btn-primary isCService:selected-button'}}>C Service</button>
-        <button {{action 'typeSelect' 'shipping'}} {{bind-attr class=':btn :btn-primary isShipping:selected-button'}}>Shipping</button>
+        {{#each task in taskTypes}}
+        <button {{action 'typeSelect' task.name}}
+          {{bind-attr class=':btn :btn-primary task.selected:selected-button'}}
+          >
+          {{task.name}}
+        </button>
+        {{/each}}
       </div>
       <div class='col-md-9' style='padding:0;'>
         <div class='col-md-12 input-group'>
           <span class="input-group-addon" id="customerSpan">Customer</span>
           {{input valueBinding='customer' type='text' class='form-control' aria-describedby='customerSpan'}}
         </div>
-        {{#view 'cServiceInputs' isVisible=isCService}}
+        {{#view 'socialTechInputs' isVisible=isSocialTech}}
         <div class='col-md-6' style='padding:0;'>
           <div class="input-group date">
-            <span class="input-group-addon date" id="beginningSpan">Beginning</span>
-            {{input valueBinding='beginning' disabled='true' type='text' class='form-control' aria-describedby='beginningSpan'}}
+            <span class="input-group-addon date" id="beginningSpan">Begin</span>
+            {{input valueBinding='begin' disabled='true' type='text' class='form-control' aria-describedby='beginningSpan'}}
+          </div>
+        </div>
+        <div class='col-md-6' style='padding:0;'>
+        </div>
+        {{/view}}
+        {{#view 'meetingInputs' isVisible=isMeeting}}
+        <div class='col-md-6' style='padding:0;'>
+          <div class="input-group date">
+            <span class="input-group-addon date" id="beginningSpan">Begin</span>
+            {{input valueBinding='begin' disabled='true' type='text' class='form-control' aria-describedby='beginningSpan'}}
           </div>
         </div>
         <div class='col-md-6' style='padding:0;'>
@@ -152,53 +167,54 @@
           </div>
         </div>
         {{/view}}
-        {{#view 'shippingInputs' isVisible=isShipping}}
+        {{#view 'paymentOrderInputs' isVisible=isPaymentOrder}}
         <div class='col-md-6' style='padding:0;'>
-          <div class="input-group">
-            <span class="input-group-addon" id="itemNumberSpan">Item #</span>
-            {{input valueBinding='itemNum' type='text' class='form-control' aria-describedby='beginningSpan'}}
+          <div class="input-group date">
+            <span class="input-group-addon date" id="beginningSpan">Begin</span>
+            {{input valueBinding='begin' disabled='true' type='text' class='form-control' aria-describedby='beginningSpan'}}
+          </div>
+        </div>
+        <div class='col-md-6' style='padding:0;'>
+          <div class="input-group date">
+            <span class="input-group-addon date" id="endSpan">End</span>
+            {{input valueBinding='end' disabled='true' type='text' class='form-control' aria-describedby='endSpan'}}
           </div>
         </div>
         <div class='col-md-6' style='padding:0;'>
           <div class="input-group">
-            <span class="input-group-addon" id="endSpan">Quantity</span>
-            {{input valueBinding='quantity' type='text' class='form-control' aria-describedby='endSpan'}}
+            <span class="input-group-addon" id="amountSpan">Amount</span>
+            {{input valueBinding='amount' type='number' class='form-control' aria-describedby='amountSpant'}}
           </div>
+        </div>
+        <div class='col-md-6'>
         </div>
         {{/view}}
-      </div>
-      <div class='col-md-12' style='padding:0;'>
-        {{textarea valueBinding='description' class='form-control' maxlength='140' rows='2'}}
-      </div>
-      <div style='text-align:center;'>
-        <button {{action 'addTask'}}class='btn btn-success'>Add</button>
+        <div class='col-md-12' style='padding:0;'>
+          {{textarea valueBinding='text' class='form-control' maxlength='140' rows='2'}}
+        </div>
+        <div class='col-md-12' style='text-align:center;padding:3%;'>
+          <button {{action 'addTask'}}class='btn btn-success'>Add</button>
+        </div>
       </div>
     </div>
-    <div class='col-md-2'></div>
+    <div class='col-md-5'></div>
     {{/view}}
     <table class='table'>
       <thead>
         <tr>
-          <th>#</th>
+          <th>Type</th>
           <th>Customer</th>
-          <th>Created</th>
-          <th>Beginning / Item Number</th>
-          <th>End / Quantity</th>
+          <th>Begin</th>
+          <th>Notes</th>
         </tr>
       </thead>
       <tbody>
         {{#each task in model}}
         {{#view 'task' classNames='hover' id=task.id tag='tr' task=task}}
-          <td>{{task.id}}</td>
+          <td>{{task.taskType}}</td>
           <td>{{task.customer.name}}</td>
-          <td>{{task.createAt}}</td>
-          {{#if task.isCService}}
-          <td>{{task.when}}</td>
-          <td>{{task.appoint}}</td>
-          {{else}}
-          <td>Item Number: {{task.itemNum}}</td>
-          <td>Quantity: {{task.quantity}}</td>
-          {{/if}}
+          <td>{{niceDate task.begin}}</td>
+          <td>{{task.text}}</td>
         {{/view}}
         {{/each}}
       </tbody>

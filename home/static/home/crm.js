@@ -143,22 +143,40 @@ CRM.CustomerController = Ember.Controller.extend({
 });
 CRM.TasksListController = Ember.ArrayController.extend({
   isNewTaskVisible: false,
-  taskType: 'cService',
-  isCService: function() {
-    if (this.taskType==='cService') {return true;}
+  taskType: 'social',
+  taskTypes: function() {
+    var typesArray = ['social','technical','meeting','payment','order'];
+    var taskArray = [];
+    for(var i=0;i<typesArray.length;i++) {
+      var isSelected = false;
+      if(this.get('taskType') === typesArray[i]) { isSelected = true; }
+      taskArray.push({name:typesArray[i],selected:isSelected});
+    }
+    return taskArray;
+  }.property('taskType'),
+  isSocialTech: function() {
+    var taskType = this.get('taskType');
+    if(taskType === 'social' || taskType === 'technical') {return true;}
     else {return false;}
   }.property('taskType'),
-  isShipping: function() {
-    if (this.taskType==='shipping') {return true;}
+  isMeeting: function() {
+    var taskType = this.get('taskType');
+    if(taskType === 'meeting') {return true;}
+    else {return false;}
+  }.property('taskType'),
+  isPaymentOrder: function() {
+    var taskType = this.get('taskType');
+    if(taskType === 'payment' || taskType === 'order') {return true;}
     else {return false;}
   }.property('taskType'),
   clearInputs: function() {
     this.set('customer','');
-    this.set('beginning','');
+    this.set('begin','');
     this.set('end','');
-    this.set('itemNum','');
-    this.set('quantity','');
-    this.set('description','');
+    this.set('text','');
+    this.set('amount','');
+    this.set('didPay','');
+    this.set('orderNumber','');
   },
   actions:{
     showAddTask: function() {
@@ -171,21 +189,27 @@ CRM.TasksListController = Ember.ArrayController.extend({
     },
     addTask: function() {
       var controller = this;
-      var whenValue = null, appointValue = null;
-      if (controller.get('isCService') ){
-        whenValue    = new Date(controller.get('beginning'));
-        appointValue = new Date(controller.get('end'));
+      var end = null;
+      var amount = null;
+      var didPay = false;
+      var orderNumber = "";
+      if(this.get('isMeeting') || this.get('isPaymentOrder')) {
+        end = this.get('end');
+      }
+      if(this.get('isPaymentOrder')) {
+        amount = this.get('amount');
       }
       var task = this.store.createRecord('task',{
-        text:       controller.get('description'),
-        createAt:   new Date(),
-        isCService: controller.get('isCService'),
-        isShipping: controller.get('isShipping'),
-        when:       whenValue,
-        appoint:    appointValue,
-        itemNum:    controller.get('itemNum'),
-        quantity:   controller.get('quantity'),
-        customer:   this.store.find('customer',1)
+        owner:        this.store.metadataFor('task',{page:1}).vendor,
+        text:         this.get('text'),
+        createdAt:    new Date(),
+        taskType:     this.get('taskType'),
+        begin:        new Date(this.get('begin')),
+        end:          end,
+        amount:       amount,
+        didPay:       didPay,
+        orderNumber:  orderNumber,
+        customer:     this.store.getById('customer',this.get('customer'))
       });
       task.save().then(function(){
         controller.clearInputs();
@@ -234,8 +258,9 @@ CRM.NewTaskView = Ember.View.extend({
     });
   }
 });
-CRM.CServiceInputsView = Ember.View.extend({});
-CRM.ShippingInputsView = Ember.View.extend({});
+CRM.SocialTechInputsView = Ember.View.extend({});
+CRM.MeetingInputsView = Ember.View.extend({});
+CRM.PaymentOrderInputsView = Ember.View.extend({});
 
 CRM.ApplicationAdapter = DS.RESTAdapter.extend({
   buildURL: function() {
