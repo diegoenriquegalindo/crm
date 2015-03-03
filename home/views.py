@@ -120,8 +120,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.serializer_class(queryset, many=True)
         data = {'task':serializer.data}
+        meta = {}
+        meta['vendor'] = \
+                Vendor.objects.get(username=str(request.user.username)).id
         if 'num_pages' in queryset.__dict__:
-            data['meta'] = {'num_pages':queryset.num_pages}
+            meta['num_pages'] = queryset.num_pages
+        data['meta'] = meta
         return Response(data)
 
     def retrieve(self,request,id=None):
@@ -151,14 +155,13 @@ class TaskViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(\
                     Q(id__contains=search) |\
                     Q(text__contains=search) |\
-                    Q(createAt__contains=search) |\
+                    Q(createdAt__contains=search) |\
                     Q(taskType__contains=search) |\
                     Q(begin__contains=search) |\
                     Q(end__contains=search) |\
                     Q(amount__contains=search) |\
                     Q(didPay__contains=search) |\
-                    Q(orderNumber__contains=search) |\
-                    Q(customer__contains=search) )
+                    Q(orderNumber__contains=search) )
         page = self.request.QUERY_PARAMS.get('page', None)
         if page is not None:
             try: page = int(page)
