@@ -17,14 +17,15 @@ class Vendor(AbstractUser):
 
 class Task(models.Model):
     owner = models.ForeignKey('home.Vendor',related_name='tasks')
-    text = models.CharField(max_length=140)
+    text = models.CharField(max_length=140,blank=True)
     createdAt = models.DateTimeField()
     taskType = models.CharField(max_length=11)
     begin = models.DateTimeField()
-    end = models.DateTimeField()
-    amount = models.DecimalField(max_digits=11,decimal_places=2)
+    end = models.DateTimeField(null=True,blank=True)
+    amount = models.DecimalField(max_digits=11,decimal_places=2,\
+            null=True,blank=True)
     didPay = models.BooleanField()
-    orderNumber = models.CharField(max_length=20)
+    orderNumber = models.CharField(max_length=20,blank=True)
     customer = models.ForeignKey(Customer)
     def __unicode__(self):
         return self.owner.username + "-" + self.customer.name
