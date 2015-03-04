@@ -49,7 +49,7 @@ CRM.Router.map(function(){
 
 var searchFunction = function() {
   this.set('page',1);
-  var text = this.get('text').toString();
+  var text = this.get('searchText').toString();
   var controller = this;
   Ember.run.next(function(){
     controller.transitionToRoute({ queryParams: {page:1, search:text} });
@@ -59,8 +59,8 @@ CRM.IndexController = Ember.ArrayController.extend({
   isIndex: true,
   queryParams: ['page','search'],
   page: 1,
-  search: "",
-  text: "",
+  search: '',
+  searchText: '',
   actions:{
     customerSelect: function(id){
       this.transitionToRoute('customer',id);
@@ -135,13 +135,15 @@ CRM.IndexController = Ember.ArrayController.extend({
     return bArray;
   }.property('model'),
 });
-CRM.TasksController = Ember.Controller.extend({
-  isTasks: true
-});
 CRM.CustomerController = Ember.Controller.extend({
   isIndex: true
 });
-CRM.TasksListController = Ember.ArrayController.extend({
+CRM.TasksController = Ember.ArrayController.extend({
+  queryParams: ['page','search'],
+  page:1,
+  search: '',
+  text: '',
+  isTasks: true,
   isNewTaskVisible: false,
   taskType: 'social',
   taskTypes: function() {
@@ -199,23 +201,38 @@ CRM.TasksListController = Ember.ArrayController.extend({
       if(this.get('isPaymentOrder')) {
         amount = this.get('amount');
       }
-      var task = this.store.createRecord('task',{
-        owner:        this.store.metadataFor('task',{page:1}).vendor,
-        text:         this.get('text'),
-        createdAt:    new Date(),
-        taskType:     this.get('taskType'),
-        begin:        new Date(this.get('begin')),
-        end:          end,
-        amount:       amount,
-        didPay:       didPay,
-        orderNumber:  orderNumber,
-        customer:     this.store.getById('customer',this.get('customer'))
+      var customerPromise = this.store.find('customer',this.get('customer'));
+      customerPromise.then(function(customer){
+        var task = controller.store.createRecord('task',{
+          owner:        controller.store.metadataFor('task',{page:1}).vendor,
+          text:         controller.get('text'),
+          createdAt:    new Date(),
+          taskType:     controller.get('taskType'),
+          begin:        new Date(controller.get('begin')),
+          end:          end,
+          amount:       amount,
+          didPay:       didPay,
+          orderNumber:  orderNumber,
+          customer:     customer
+        });
+        task.save().then(function(task){
+          controller.clearInputs();
+          controller.toggleProperty('isNewTaskVisible');
+          controller.get('model').addObject(task);
+          var currentPage = controller.get('page');
+          if(currentPage!=1) {
+            Ember.run.next(function(){
+              controller.transitionToRoute({ queryParams: {page:1} });
+            });
+          }
+          else {
+            controller.send('taskAdded');
+          }
+
+        });
       });
-      task.save().then(function(){
-        controller.clearInputs();
-        controller.toggleProperty('isNewTaskVisible');
-      });
-    }
+    },
+    search: searchFunction
   }
 });
 
@@ -229,8 +246,19 @@ CRM.IndexRoute = Ember.Route.extend({
   },
 });
 CRM.TasksRoute = Ember.Route.extend({
-  model: function() {
-    return this.store.findAll('task');
+  queryParams: {
+    page:{refreshModel:true},
+    search:{refreshModel:true}
+  },
+  model: function(params) {
+    var promiseArray = this.store.find(
+      'task',{page:params.page,search:params.search});
+    return promiseArray;
+  },
+  actions:{
+    taskAdded: function() {
+      this.refresh();
+    }
   }
 });
 
@@ -288,7 +316,7 @@ CRM.Task = DS.Model.extend({
   amount:       DS.attr('number'),
   didPay:       DS.attr('boolean'),
   orderNumber:  DS.attr('string'),
-  customer:     DS.belongsTo('customer')
+  customer:     DS.belongsTo('customer',{async:true})
 });
 
 Ember.Handlebars.registerBoundHelper('niceDate',function(date) {

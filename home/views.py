@@ -151,6 +151,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Task.objects.filter(owner=self.request.user)
         queryset = queryset.extra(order_by=['createdAt'])
+        queryset = queryset.reverse()
         search = self.request.QUERY_PARAMS.get('search',None)
         if search is not None:
             queryset = queryset.filter(\
@@ -162,7 +163,8 @@ class TaskViewSet(viewsets.ModelViewSet):
                     Q(end__contains=search) |\
                     Q(amount__contains=search) |\
                     Q(didPay__contains=search) |\
-                    Q(orderNumber__contains=search) )
+                    Q(orderNumber__contains=search) |\
+                    Q(customer__name__contains=search) )
         page = self.request.QUERY_PARAMS.get('page', None)
         if page is not None:
             try: page = int(page)

@@ -56,7 +56,7 @@
     </h3>
     <div class="col-md-6 input-group">
       <span class="input-group-addon" id="sizing-addon1">Search </span>
-      {{input valueBinding='text' action='search' type='text' classNames='form-control'}}
+      {{input valueBinding='searchText' action='search' type='text' classNames='form-control'}}
     </div>
     {% endverbatim %}
   </script>
@@ -107,18 +107,18 @@
         </tr>
       </tbody>
     </table>
-    {{render 'tasks_list' tasks}}
+    {{partial 'tasks_list'}}
     {%endverbatim%}
   </script>
 
   <script type='text/x-handlebars' data-template-name='tasks'>
     {%verbatim%}
     {{partial 'buttonSearchHeader'}}
-    {{render 'tasks_list' model}}
+    {{partial 'tasks_list'}}
     {%endverbatim%}
   </script>
 
-  <script data-template-name="tasks_list" type="text/x-handlebars">
+  <script data-template-name="_tasks_list" type="text/x-handlebars">
     {%verbatim%}
     <br>
     <div id='add-btn-div'>
