@@ -24,7 +24,7 @@ class Task(models.Model):
     end = models.DateTimeField(null=True,blank=True)
     amount = models.DecimalField(max_digits=11,decimal_places=2,\
             null=True,blank=True)
-    didPay = models.BooleanField()
+    didPay = models.NullBooleanField()
     orderNumber = models.CharField(max_length=20,blank=True)
     customer = models.ForeignKey(Customer)
     def __unicode__(self):

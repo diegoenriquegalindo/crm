@@ -80,7 +80,7 @@ class CustomerViewSet(viewsets.ModelViewSet):
     def retrieve(self,request,id=None):
         customer = self.get_object()
         serializer = self.serializer_class(customer)
-        return Response(serializer.data)
+        return Response({ 'customer': serializer.data })
 
     def get_queryset(self):
         queryset = Customer.objects.filter(owner=self.request.user)
@@ -131,7 +131,7 @@ class TaskViewSet(viewsets.ModelViewSet):
     def retrieve(self,request,id=None):
         task = self.get_object()
         serializer = self.serializer_class(task)
-        return Response(serializer.data)
+        return Response({ 'task': serializer.data })
 
     def create(self,request):
         if request.is_ajax():
@@ -150,6 +150,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = Task.objects.filter(owner=self.request.user)
+        queryset = queryset.extra(order_by=['createdAt'])
         search = self.request.QUERY_PARAMS.get('search',None)
         if search is not None:
             queryset = queryset.filter(\
