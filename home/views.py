@@ -92,6 +92,8 @@ class CustomerViewSet(viewsets.ModelViewSet):
                     Q(contact__contains=search) |\
                     Q(position__contains=search) )
         page = self.request.QUERY_PARAMS.get('page', None)
+        try: int(page)
+        except: page = None
         if page is not None:
             try: page = int(page)
             except ValueError: page = None
@@ -152,7 +154,12 @@ class TaskViewSet(viewsets.ModelViewSet):
         queryset = Task.objects.filter(owner=self.request.user)
         queryset = queryset.extra(order_by=['createdAt'])
         queryset = queryset.reverse()
+        customer_id = self.request.QUERY_PARAMS.get('customer',None)
+        try: int(customer_id)
+        except: customer_id = None
         search = self.request.QUERY_PARAMS.get('search',None)
+        if customer_id is not None:
+            queryset = queryset.filter(customer_id=customer_id)
         if search is not None:
             queryset = queryset.filter(\
                     Q(id__contains=search) |\
@@ -166,6 +173,8 @@ class TaskViewSet(viewsets.ModelViewSet):
                     Q(orderNumber__contains=search) |\
                     Q(customer__name__contains=search) )
         page = self.request.QUERY_PARAMS.get('page', None)
+        try: int(page)
+        except: page = None
         if page is not None:
             try: page = int(page)
             except ValueError: page = None
@@ -178,3 +187,4 @@ class TaskViewSet(viewsets.ModelViewSet):
                     queryset = Task.objects.none()
                 queryset.num_pages = paginator.num_pages
         return queryset
+
