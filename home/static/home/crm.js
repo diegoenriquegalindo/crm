@@ -47,6 +47,26 @@ CRM.Router.map(function(){
   this.resource('customer',{path:'/:customer_id'});
 });
 
+var pageSelectFunction = function(page) {
+  if (page==='...') return;
+  this.set('page',page);
+  this.transitionToRoute({queryParams: {page: 'page'}});
+};
+var prevNextSelectFunction = function(prevNext) {
+  if (this.get('numPages')===1) return;
+  var nextPage = 0;
+  var page = this.get('page');
+  if (prevNext === 'prev') {
+    if (page===1) return;
+    nextPage = page-1;
+  }
+  else {
+    if (page===this.get('numPages')) return;
+    nextPage = page+1;
+  }
+  this.set('page',nextPage);
+  this.transitionToRoute({queryParams: {page: 'page'}});
+};
 var searchFunction = function() {
   this.set('page',1);
   var text = this.get('searchText').toString();
@@ -55,6 +75,51 @@ var searchFunction = function() {
     controller.transitionToRoute({ queryParams: {page:1, search:text} });
   });
 };
+var buttonArrayFunction = function() {
+  var buttonAmount = 7;
+  var visibleLimit = 5;
+  var bArray = Array(buttonAmount);
+  var numPages = this.get('numPages');
+  var page = this.get('page');
+  for(var i=0;i<buttonAmount;i++) {
+    bArray[i] = {number:String(i+1),isVisible:true,
+      isSelected:false,clickable:true};
+  }
+  if (numPages<=visibleLimit) {
+    for(var i = buttonAmount-1;i>=numPages;i--) {
+      bArray[i].isVisible = false;
+    }
+    bArray[page-1].isSelected = true;
+  }
+  else {
+    bArray[buttonAmount-1].number = String(numPages);
+    if(page<visibleLimit-1) {
+      for(var i=visibleLimit-1;i<buttonAmount-1;i++) {
+        bArray[i].number = '...';bArray[i].clickable = false;
+      }
+      bArray[page-1].isSelected = true;
+    }
+    else if(page>=numPages-2) {
+      for(var i=1;i<3;i++) {
+        bArray[i].number = '...'; bArray[i].clickable = false;
+      }
+      for(var i=3;i<buttonAmount;i++) {
+        bArray[i].number = String(i+numPages-6);
+        if(page == bArray[i].number) bArray[i].isSelected = true;
+      }
+    }
+    else {
+      bArray[1].number = "..."; bArray[1].clickable = false;
+      bArray[2].number = String(page-1);
+      bArray[3].number = String(page); bArray[3].isSelected = true;
+      bArray[4].number = String(page+1);
+      bArray[5].number = "..."; bArray[5].clickable = false;
+      bArray[6].number = String(numPages);
+    }
+  }
+  return bArray;
+};
+
 CRM.IndexController = Ember.ArrayController.extend({
   isIndex: true,
   queryParams: ['page','search'],
@@ -65,75 +130,14 @@ CRM.IndexController = Ember.ArrayController.extend({
     customerSelect: function(id){
       this.transitionToRoute('customer',id);
     },
-    pageSelect: function(page) {
-      if (page==='...') return;
-      this.set('page',page);
-      this.transitionToRoute({queryParams: {page: 'page'}});
-    },
-    prevNextSelect: function(prevNext) {
-      if (this.get('numPages')===1) return;
-      var nextPage = 0;
-      var page = this.get('page');
-      if (prevNext === 'prev') {
-        if (page===1) return;
-        nextPage = page-1;
-      }
-      else {
-        if (page===this.get('numPages')) return;
-        nextPage = page+1;
-      }
-      this.set('page',nextPage);
-      this.transitionToRoute({queryParams: {page: 'page'}});
-    },
+    pageSelect: pageSelectFunction,
+    prevNextSelect: prevNextSelectFunction,
     search: searchFunction
   },
   numPages: function() {
     return this.store.metadataFor('customer',{page:this.get('page')}).num_pages;
   }.property('model'),
-  buttonArray: function() {
-    var buttonAmount = 7;
-    var visibleLimit = 5;
-    var bArray = Array(buttonAmount);
-    var numPages = this.get('numPages');
-    var page = this.get('page');
-    for(var i=0;i<buttonAmount;i++) {
-      bArray[i] = {number:String(i+1),isVisible:true,
-        isSelected:false,clickable:true};
-    }
-    if (numPages<=visibleLimit) {
-      for(var i = buttonAmount-1;i>=numPages;i--) {
-        bArray[i].isVisible = false;
-      }
-      bArray[page-1].isSelected = true;
-    }
-    else {
-      bArray[buttonAmount-1].number = String(numPages);
-      if(page<visibleLimit-1) {
-        for(var i=visibleLimit-1;i<buttonAmount-1;i++) {
-          bArray[i].number = '...';bArray[i].clickable = false;
-        }
-        bArray[page-1].isSelected = true;
-      }
-      else if(page>=numPages-2) {
-        for(var i=1;i<3;i++) {
-          bArray[i].number = '...'; bArray[i].clickable = false;
-        }
-        for(var i=3;i<buttonAmount;i++) {
-          bArray[i].number = String(i+numPages-6);
-          if(page == bArray[i].number) bArray[i].isSelected = true;
-        }
-      }
-      else {
-        bArray[1].number = "..."; bArray[1].clickable = false;
-        bArray[2].number = String(page-1);
-        bArray[3].number = String(page); bArray[3].isSelected = true;
-        bArray[4].number = String(page+1);
-        bArray[5].number = "..."; bArray[5].clickable = false;
-        bArray[6].number = String(numPages);
-      }
-    }
-    return bArray;
-  }.property('model'),
+  buttonArray: buttonArrayFunction.property('model')
 });
 CRM.CustomerController = Ember.Controller.extend({
   isIndex: true
@@ -146,6 +150,9 @@ CRM.TasksController = Ember.ArrayController.extend({
   isTasks: true,
   isNewTaskVisible: false,
   taskType: 'social',
+  numPages: function() {
+    return this.store.metadataFor('task',{page:this.get('page')}).num_pages;
+  }.property('model'),
   taskTypes: function() {
     var typesArray = ['social','technical','meeting','payment','order'];
     var taskArray = [];
@@ -172,12 +179,8 @@ CRM.TasksController = Ember.ArrayController.extend({
     else {return false;}
   }.property('taskType'),
   clearInputs: function() {
-    this.set('customer','');
-    this.set('begin','');
-    this.set('end','');
-    this.set('text','');
-    this.set('amount','');
-    this.set('didPay','');
+    this.set('customer',''); this.set('begin','');  this.set('end','');
+    this.set('text','');     this.set('amount',''); this.set('didPay','');
     this.set('orderNumber','');
   },
   actions:{
@@ -232,8 +235,11 @@ CRM.TasksController = Ember.ArrayController.extend({
         });
       });
     },
+    pageSelect: pageSelectFunction,
+    prevNextSelect: prevNextSelectFunction,
     search: searchFunction
-  }
+  },
+  buttonArray: buttonArrayFunction.property('model')
 });
 
 CRM.IndexRoute = Ember.Route.extend({

@@ -32,7 +32,7 @@
   <p>{{username}}</p>
 </div>
 
-<div id='content' class='col-md-9' style='background-color:#D3E9FC;'>
+<div id='content' class='col-md-9'>
   {% block content %}
   <script type='text/x-handlebars' data-template-name='application'>
     {% verbatim %}
@@ -64,7 +64,7 @@
   <script type='text/x-handlebars' data-template-name='index'>
     {%verbatim%}
     {{partial 'buttonSearchHeader'}}
-    <div style='height:550px;'>
+    <div style='height:500px;'>
     <table class="table">
       <thead>
         <tr>
@@ -115,6 +115,7 @@
     {%verbatim%}
     {{partial 'buttonSearchHeader'}}
     {{partial 'tasks_list'}}
+    {{partial 'paginationFooter'}}
     {%endverbatim%}
   </script>
 
@@ -199,7 +200,7 @@
     </div>
     <div class='col-md-5'></div>
     {{/view}}
-    <table class='table'>
+    <table class='table' style='height:500px;'>
       <thead>
         <tr>
           <th>Type</th>
