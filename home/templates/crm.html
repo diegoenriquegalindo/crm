@@ -130,7 +130,7 @@
     </div>
     <br>
     {{#view 'newTask' isVisible=isNewTaskVisible}}
-    <div class='col-md-7 new-task-div'>
+    <div {{bind-attr class="isTasks:col-md-7:col-md-12 :new-task-div"}}>
       <div class='col-md-3 btn-group-vertical'>
         {{#each task in taskTypes}}
         <button {{action 'typeSelect' task.name}}
@@ -141,10 +141,12 @@
         {{/each}}
       </div>
       <div class='col-md-9' style='padding:0;'>
+        {{#if isTasks}}
         <div class='col-md-12 input-group'>
           <span class="input-group-addon" id="customerSpan">Customer</span>
           {{input valueBinding='customer' type='text' class='form-control' aria-describedby='customerSpan'}}
         </div>
+        {{/if}}
         {{#view 'socialTechInputs' isVisible=isSocialTech}}
         <div class='col-md-6' style='padding:0;'>
           <div class="input-group date">
@@ -199,7 +201,9 @@
         </div>
       </div>
     </div>
+    {{#if isTasks}}
     <div class='col-md-5'></div>
+    {{/if}}
     {{/view}}
     <table class='table' style='height:500px;'>
       <thead>

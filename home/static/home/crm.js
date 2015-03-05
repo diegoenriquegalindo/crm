@@ -217,9 +217,8 @@ CRM.CustomerController = Ember.Controller.extend({
   isMeeting: isTypeFunction('meeting').property('taskType'),
   isPaymentOrder: isTypeFunction('payment','order').property('taskType'),
   clearInputs: function() {
-    this.set('customer',''); this.set('begin','');  this.set('end','');
-    this.set('text','');     this.set('amount',''); this.set('didPay','');
-    this.set('orderNumber','');
+    this.set('begin','');  this.set('end',''); this.set('text','');
+    this.set('amount',''); this.set('didPay',''); this.set('orderNumber','');
   },
   actions:{
     showAddTask: function() {
@@ -300,8 +299,11 @@ CRM.CustomerRoute = Ember.Route.extend({
   },
   setupController: function(controller,model,params) {
     var customer_id = params.params.customer.customer_id;
-    var currentCustomer = this.store.find('customer',customer_id);
-    controller.set('currentCustomer',currentCustomer);
+    var currentCustomer = this.store.find('customer',customer_id).
+      then(function(customer){
+      controller.set('customer',customer.id);
+      controller.set('currentCustomer',customer);
+    });
     controller.set('model',model);
   }
 });
