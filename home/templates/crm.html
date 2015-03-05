@@ -101,13 +101,14 @@
       </thead>
       <tbody>
         <tr>
-          <td>{{model.id}}</td>
-          <td>{{model.name}}</td>
-          <td>{{model.contact}}</td>
+          <td>{{currentCustomer.id}}</td>
+          <td>{{currentCustomer.name}}</td>
+          <td>{{currentCustomer.contact}}</td>
         </tr>
       </tbody>
     </table>
     {{partial 'tasks_list'}}
+    {{partial 'paginationFooter'}}
     {%endverbatim%}
   </script>
 

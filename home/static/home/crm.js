@@ -41,9 +41,7 @@ var CRM = Ember.Application.create({
 });
 
 CRM.Router.map(function(){
-  this.resource('tasks',function() {
-    this.resource('task',{path:'/:task_id'});
-  });
+  this.resource('tasks');
   this.resource('customer',{path:'/:customer_id'});
 });
 
@@ -119,13 +117,76 @@ var buttonArrayFunction = function() {
   }
   return bArray;
 };
+var isTypeFunction = function() {
+  var types = arguments;
+  var resultFunction = function() {
+    var taskType = this.get('taskType');
+    for(var i = 0;i<types.length;i++) {
+      if(taskType === types[i]) return true;
+    }
+    return false;
+  };
+  return resultFunction;
+};
+var taskTypesFunction = function() {
+  var typesArray = ['social','technical','meeting','payment','order'];
+  var taskArray = [];
+  for(var i=0;i<typesArray.length;i++) {
+    var isSelected = false;
+    if(this.get('taskType') === typesArray[i]) { isSelected = true; }
+    taskArray.push({name:typesArray[i],selected:isSelected});
+  }
+  return taskArray;
+};
+var addTaskFunction = function() {
+  var controller = this;
+  var end = null;
+  var amount = null;
+  var didPay = false;
+  var orderNumber = "";
+  if(this.get('isMeeting') || this.get('isPaymentOrder')) {
+    end = this.get('end');
+  }
+  if(this.get('isPaymentOrder')) {
+    amount = this.get('amount');
+  }
+  var customerPromise = this.store.find('customer',this.get('customer'));
+  customerPromise.then(function(customer){
+    var task = controller.store.createRecord('task',{
+      owner:        controller.store.metadataFor('task',{page:1}).vendor,
+      text:         controller.get('text'),
+      createdAt:    new Date(),
+      taskType:     controller.get('taskType'),
+      begin:        new Date(controller.get('begin')),
+      end:          end,
+      amount:       amount,
+      didPay:       didPay,
+      orderNumber:  orderNumber,
+      customer:     customer
+    });
+    task.save().then(function(task){
+      controller.clearInputs();
+      controller.toggleProperty('isNewTaskVisible');
+      controller.get('model').addObject(task);
+      var currentPage = controller.get('page');
+      if(currentPage!=1) {
+        Ember.run.next(function(){
+          controller.transitionToRoute({ queryParams: {page:1} });
+        });
+      }
+      else {
+        controller.send('taskAdded');
+      }
+    });
+  });
+};
 
 CRM.IndexController = Ember.ArrayController.extend({
-  isIndex: true,
   queryParams: ['page','search'],
   page: 1,
   search: '',
   searchText: '',
+  isIndex: true,
   actions:{
     customerSelect: function(id){
       this.transitionToRoute('customer',id);
@@ -140,44 +201,21 @@ CRM.IndexController = Ember.ArrayController.extend({
   buttonArray: buttonArrayFunction.property('model')
 });
 CRM.CustomerController = Ember.Controller.extend({
-  isIndex: true
-});
-CRM.TasksController = Ember.ArrayController.extend({
   queryParams: ['page','search'],
   page:1,
   search: '',
+  searchText: '',
   text: '',
-  isTasks: true,
+  isIndex: true,
   isNewTaskVisible: false,
   taskType: 'social',
   numPages: function() {
     return this.store.metadataFor('task',{page:this.get('page')}).num_pages;
   }.property('model'),
-  taskTypes: function() {
-    var typesArray = ['social','technical','meeting','payment','order'];
-    var taskArray = [];
-    for(var i=0;i<typesArray.length;i++) {
-      var isSelected = false;
-      if(this.get('taskType') === typesArray[i]) { isSelected = true; }
-      taskArray.push({name:typesArray[i],selected:isSelected});
-    }
-    return taskArray;
-  }.property('taskType'),
-  isSocialTech: function() {
-    var taskType = this.get('taskType');
-    if(taskType === 'social' || taskType === 'technical') {return true;}
-    else {return false;}
-  }.property('taskType'),
-  isMeeting: function() {
-    var taskType = this.get('taskType');
-    if(taskType === 'meeting') {return true;}
-    else {return false;}
-  }.property('taskType'),
-  isPaymentOrder: function() {
-    var taskType = this.get('taskType');
-    if(taskType === 'payment' || taskType === 'order') {return true;}
-    else {return false;}
-  }.property('taskType'),
+  taskTypes: taskTypesFunction.property('taskType'),
+  isSocialTech: isTypeFunction('social','technical').property('taskType'),
+  isMeeting: isTypeFunction('meeting').property('taskType'),
+  isPaymentOrder: isTypeFunction('payment','order').property('taskType'),
   clearInputs: function() {
     this.set('customer',''); this.set('begin','');  this.set('end','');
     this.set('text','');     this.set('amount',''); this.set('didPay','');
@@ -192,49 +230,44 @@ CRM.TasksController = Ember.ArrayController.extend({
       this.clearInputs();
       this.set('taskType',type);
     },
-    addTask: function() {
-      var controller = this;
-      var end = null;
-      var amount = null;
-      var didPay = false;
-      var orderNumber = "";
-      if(this.get('isMeeting') || this.get('isPaymentOrder')) {
-        end = this.get('end');
-      }
-      if(this.get('isPaymentOrder')) {
-        amount = this.get('amount');
-      }
-      var customerPromise = this.store.find('customer',this.get('customer'));
-      customerPromise.then(function(customer){
-        var task = controller.store.createRecord('task',{
-          owner:        controller.store.metadataFor('task',{page:1}).vendor,
-          text:         controller.get('text'),
-          createdAt:    new Date(),
-          taskType:     controller.get('taskType'),
-          begin:        new Date(controller.get('begin')),
-          end:          end,
-          amount:       amount,
-          didPay:       didPay,
-          orderNumber:  orderNumber,
-          customer:     customer
-        });
-        task.save().then(function(task){
-          controller.clearInputs();
-          controller.toggleProperty('isNewTaskVisible');
-          controller.get('model').addObject(task);
-          var currentPage = controller.get('page');
-          if(currentPage!=1) {
-            Ember.run.next(function(){
-              controller.transitionToRoute({ queryParams: {page:1} });
-            });
-          }
-          else {
-            controller.send('taskAdded');
-          }
-
-        });
-      });
+    addTask: addTaskFunction,
+    pageSelect: pageSelectFunction,
+    prevNextSelect: prevNextSelectFunction,
+    search: searchFunction
+  },
+  buttonArray: buttonArrayFunction.property('model')
+});
+CRM.TasksController = Ember.ArrayController.extend({
+  queryParams: ['page','search'],
+  page:1,
+  search: '',
+  text: '',
+  searchText: '',
+  isTasks: true,
+  isNewTaskVisible: false,
+  taskType: 'social',
+  numPages: function() {
+    return this.store.metadataFor('task',{page:this.get('page')}).num_pages;
+  }.property('model'),
+  taskTypes: taskTypesFunction.property('taskType'),
+  isSocialTech: isTypeFunction('social','technical').property('taskType'),
+  isMeeting: isTypeFunction('meeting').property('taskType'),
+  isPaymentOrder: isTypeFunction('payment','order').property('taskType'),
+  clearInputs: function() {
+    this.set('customer',''); this.set('begin','');  this.set('end','');
+    this.set('text','');     this.set('amount',''); this.set('didPay','');
+    this.set('orderNumber','');
+  },
+  actions:{
+    showAddTask: function() {
+      this.clearInputs();
+      this.toggleProperty('isNewTaskVisible');
     },
+    typeSelect: function(type) {
+      this.clearInputs();
+      this.set('taskType',type);
+    },
+    addTask: addTaskFunction,
     pageSelect: pageSelectFunction,
     prevNextSelect: prevNextSelectFunction,
     search: searchFunction
@@ -242,20 +275,38 @@ CRM.TasksController = Ember.ArrayController.extend({
   buttonArray: buttonArrayFunction.property('model')
 });
 
+var queryParams = {
+  page:{refreshModel:true},
+  search:{refreshModel:true}
+};
 CRM.IndexRoute = Ember.Route.extend({
-  queryParams: {
-    page:{refreshModel:true},
-    search:{refreshModel:true}
-  },
+  queryParams: queryParams,
   model: function(params) {
     return this.store.find('customer',{page:params.page,search:params.search});
   },
 });
-CRM.TasksRoute = Ember.Route.extend({
-  queryParams: {
-    page:{refreshModel:true},
-    search:{refreshModel:true}
+CRM.CustomerRoute = Ember.Route.extend({
+  queryParams: queryParams,
+  model: function(params) {
+    return this.store.find(
+      'task',
+      {page:params.page,search:params.search,customer:params.customer_id}
+    );
   },
+  actions:{
+    taskAdded: function() {
+      this.refresh();
+    }
+  },
+  setupController: function(controller,model,params) {
+    var customer_id = params.params.customer.customer_id;
+    var currentCustomer = this.store.find('customer',customer_id);
+    controller.set('currentCustomer',currentCustomer);
+    controller.set('model',model);
+  }
+});
+CRM.TasksRoute = Ember.Route.extend({
+  queryParams: queryParams,
   model: function(params) {
     var promiseArray = this.store.find(
       'task',{page:params.page,search:params.search});
