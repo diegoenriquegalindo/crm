@@ -167,7 +167,7 @@ var addTaskFunction = function() {
     task.save().then(function(task){
       controller.clearInputs();
       controller.toggleProperty('isNewTaskVisible');
-      controller.get('model').addObject(task);
+      controller.get('tasks').addObject(task);
       var currentPage = controller.get('page');
       if(currentPage!=1) {
         Ember.run.next(function(){
@@ -209,6 +209,9 @@ CRM.CustomerController = Ember.Controller.extend({
   isIndex: true,
   isNewTaskVisible: false,
   taskType: 'social',
+  tasks: function() {
+    return this.get('model');
+  }.property('model'),
   numPages: function() {
     return this.store.metadataFor('task',{page:this.get('page')}).num_pages;
   }.property('model'),
@@ -236,15 +239,20 @@ CRM.CustomerController = Ember.Controller.extend({
   },
   buttonArray: buttonArrayFunction.property('model')
 });
-CRM.TasksController = Ember.ArrayController.extend({
-  queryParams: ['page','search'],
+CRM.TasksController = Ember.Controller.extend({
+  queryParams: ['page','search','customerPage','customerSearch'],
   page:1,
   search: '',
+  customerPage:1,
+  customerSearch:'',
   text: '',
   searchText: '',
   isTasks: true,
   isNewTaskVisible: false,
   taskType: 'social',
+  tasks: function() {
+    return this.get('model').tasks;
+  }.property('model'),
   numPages: function() {
     return this.store.metadataFor('task',{page:this.get('page')}).num_pages;
   }.property('model'),
@@ -274,18 +282,21 @@ CRM.TasksController = Ember.ArrayController.extend({
   buttonArray: buttonArrayFunction.property('model')
 });
 
-var queryParams = {
-  page:{refreshModel:true},
-  search:{refreshModel:true}
+var queryParamsFunction = function() {
+  var queryParams = {};
+  for(var i = 0;i< arguments.length;i++) {
+    queryParams[arguments[i]] = {refreshModel:true};
+  }
+  return queryParams;
 };
 CRM.IndexRoute = Ember.Route.extend({
-  queryParams: queryParams,
+  queryParams: queryParamsFunction('page','search'),
   model: function(params) {
     return this.store.find('customer',{page:params.page,search:params.search});
   },
 });
 CRM.CustomerRoute = Ember.Route.extend({
-  queryParams: queryParams,
+  queryParams: queryParamsFunction('page','search'),
   model: function(params) {
     return this.store.find(
       'task',
@@ -308,11 +319,17 @@ CRM.CustomerRoute = Ember.Route.extend({
   }
 });
 CRM.TasksRoute = Ember.Route.extend({
-  queryParams: queryParams,
+  queryParams:
+    queryParamsFunction('page','search','customerPage','customerSearch'),
   model: function(params) {
-    var promiseArray = this.store.find(
+    var tasksArray = this.store.find(
       'task',{page:params.page,search:params.search});
-    return promiseArray;
+    var customersArray = this.store.find(
+      'customer',{page:params.customerPage,search:params.customerSearch});
+    return Ember.RSVP.hash({
+      tasks: tasksArray,
+      customers: customersArray
+    });
   },
   actions:{
     taskAdded: function() {

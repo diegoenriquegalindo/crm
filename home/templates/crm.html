@@ -202,7 +202,11 @@
       </div>
     </div>
     {{#if isTasks}}
-    <div class='col-md-5'></div>
+    <div class='col-md-5' style='background-color:white;'>
+    {{#each customer in model.customers}}
+    <p>{{customer.name}}</p>
+    {{/each}}
+    </div>
     {{/if}}
     {{/view}}
     <table class='table' style='height:500px;'>
@@ -215,7 +219,7 @@
         </tr>
       </thead>
       <tbody>
-        {{#each task in model}}
+        {{#each task in tasks}}
         {{#view 'task' classNames='hover' id=task.id tag='tr' task=task}}
           <td>{{task.taskType}}</td>
           <td>{{task.customer.name}}</td>
